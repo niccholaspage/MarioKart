@@ -408,7 +408,7 @@ public class RaceScheduler {
 		return;
 	}
 
-	public void stopGame(RaceTrack track, String gameId) throws Exception {
+	public void stopGame(RaceTrack track, String gameId) {
 		if (!trackInUse(track.getTrackName())) {
 			return;
 		}

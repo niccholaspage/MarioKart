@@ -384,18 +384,11 @@ public class main extends JavaPlugin {
 		if (ucars != null) {
 			ucars.unHookPlugin(this);
 		}
-		HashMap<String, Race> games = this.gameScheduler.getGames();
-		for (Race r : games.values()) {
+		for (Race r : gameScheduler.getGames().values()) {
 			r.end();
-			try {
-				this.gameScheduler.stopGame(r.getTrack(), r.getGameId());
-			} catch (Exception e) {
-			}
+			gameScheduler.stopGame(r.getTrack(), r.getGameId());
 		}
-
 		getServer().getScheduler().cancelTasks(this);
-
-		logger.info("MarioKart has been disabled!");
 	}
 
 	private void copy(InputStream in, File file) {
