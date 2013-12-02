@@ -343,7 +343,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 					RaceTrack track = main.plugin.trackManager.getRaceTracks()
 							.get(randomNumber);
 					RaceQue que = new RaceQue(track, type);
-					plugin.gameScheduler.joinGame(player, track, que, track.getTrackName());
+					plugin.gameScheduler.joinGame(player, track, que,
+							track.getTrackName());
 					return true;
 				}
 				String name = order.get(0);
@@ -404,7 +405,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 					veh.eject();
 					veh.remove();
 				}
-				main.plugin.gameScheduler.joinGame(player, track, que, trackName);
+				main.plugin.gameScheduler.joinGame(player, track, que,
+						trackName);
 				return true;
 			}
 		} else if (command.equalsIgnoreCase("queues")
@@ -449,7 +451,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 				if (que.getHowManyPlayers() > (que.getPlayerLimit() - 2)) {
 					color = ChatColor.YELLOW;
 				}
-				if (que.getHowManyPlayers() < main.config.getInt("race.que.minPlayers")) {
+				if (que.getHowManyPlayers() < main.config
+						.getInt("race.que.minPlayers")) {
 					color = ChatColor.YELLOW;
 				}
 				char[] chars = Trackname.toCharArray();
@@ -487,7 +490,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 				race.leave(race.getUser(player.getName()), true);
 			} else {
 				RaceQue queue = plugin.raceQues.getQue(que);
-				plugin.gameScheduler.leaveQue(player, queue, queue.getTrack().getTrackName());
+				plugin.gameScheduler.leaveQue(player, queue, queue.getTrack()
+						.getTrackName());
 				String msg = main.msgs.get("general.cmd.leave.success");
 				msg = msg.replaceAll(Pattern.quote("%name%"), que);
 				sender.sendMessage(main.colors.getSuccess() + msg);

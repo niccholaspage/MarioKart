@@ -196,14 +196,13 @@ public class MarioKart {
 			ItemStack inHand = evt.getPlayer().getItemInHand();
 			Player ply = evt.getPlayer();
 			if (inHand.equals(this.respawn)) {
-				if(!car.hasMetadata("car.frozen")){
+				if (!car.hasMetadata("car.frozen")) {
 					player.sendMessage(ChatColor.GREEN + "Respawning...");
 					player.setHealth(0);
 					evt.setCancelled(true);
 				}
 				return;
-			}
-			else if (ItemStackFromId.equals(
+			} else if (ItemStackFromId.equals(
 					main.config.getString("mariokart.random"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				inHand.setAmount(inHand.getAmount() - 1);

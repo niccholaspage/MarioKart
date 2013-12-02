@@ -392,9 +392,9 @@ public class main extends JavaPlugin {
 			} catch (Exception e) {
 			}
 		}
-		
+
 		getServer().getScheduler().cancelTasks(this);
-		
+
 		logger.info("MarioKart has been disabled!");
 	}
 

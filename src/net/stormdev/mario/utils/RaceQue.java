@@ -13,6 +13,7 @@ public class RaceQue {
 	int playerLimit = 2;
 	RaceType type = RaceType.RACE;
 	List<Player> players = new ArrayList<Player>();
+
 	public RaceQue(RaceTrack track, RaceType type) {
 		this.track = track;
 		this.playerLimit = track.maxplayers;
@@ -51,11 +52,11 @@ public class RaceQue {
 
 	public void removePlayer(Player player) {
 		this.players.remove(player);
-		
+
 		if (this.type == RaceType.TIME_TRIAL) {
 			main.plugin.raceQues.removeQue(this.track.getTrackName());
 		}
-		
+
 		return;
 	}
 
@@ -63,7 +64,7 @@ public class RaceQue {
 		for (Player player : this.players) {
 			if (player == null || !player.isOnline()) {
 				this.players.remove(player);
-				
+
 				if (this.type == RaceType.TIME_TRIAL) {
 					main.plugin.raceQues.removeQue(this.track.getTrackName());
 				}

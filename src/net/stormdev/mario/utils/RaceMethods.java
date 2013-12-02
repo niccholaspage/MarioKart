@@ -24,8 +24,8 @@ public class RaceMethods {
 		Race mgame = null;
 		for (String key : keys) {
 			Race game = games.get(key);
-			for (User user : game.getUsersIn()){
-				if (user.getPlayerName().equals(player.getName())){
+			for (User user : game.getUsersIn()) {
+				if (user.getPlayerName().equals(player.getName())) {
 					inAGame = true;
 					mgame = game;
 				}
@@ -41,7 +41,8 @@ public class RaceMethods {
 		Set<String> arenaNames = plugin.raceQues.getQues();
 		for (String arenaName : arenaNames) {
 			try {
-				List<Player> que = plugin.raceQues.getQue(arenaName).getPlayers();
+				List<Player> que = plugin.raceQues.getQue(arenaName)
+						.getPlayers();
 				if (que.contains(player)) {
 					return arenaName;
 				}

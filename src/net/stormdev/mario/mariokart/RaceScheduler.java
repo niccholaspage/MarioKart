@@ -48,14 +48,16 @@ public class RaceScheduler {
 	public Boolean joinGame(Player player, RaceTrack track, RaceQue que,
 			String trackName) {
 		que.validatePlayers();
-		if (que.getHowManyPlayers() < que.getPlayerLimit() && player.isOnline()
+		if (que.getHowManyPlayers() < que.getPlayerLimit()
+				&& player.isOnline()
 				&& !(que.getType() == RaceType.TIME_TRIAL && que
-				.getHowManyPlayers() > 0)) {
+						.getHowManyPlayers() > 0)) {
 			if (player.isOnline()) {
 				// que.addPlayer(playername);
 				List<Player> arenaque = que.getPlayers();
 				if (arenaque.contains(player)) {
-					player.sendMessage(main.colors.getError() + main.msgs .get("race.que.existing"));
+					player.sendMessage(main.colors.getError()
+							+ main.msgs.get("race.que.existing"));
 					return true;
 				}
 
@@ -69,47 +71,62 @@ public class RaceScheduler {
 
 						for (Player pp : arenaque) {
 							if (pp != null && pp.isOnline()) {
-								pp.sendMessage(main.colors.getTitle() + "[MarioKart:] " + main.colors.getInfo() + p.getName() + main.msgs.get("race.que.left"));
+								pp.sendMessage(main.colors.getTitle()
+										+ "[MarioKart:] "
+										+ main.colors.getInfo() + p.getName()
+										+ main.msgs.get("race.que.left"));
 							}
 						}
 					} else {
-						p.sendMessage(main.colors.getTitle() + "[MarioKart:] " + main.colors.getInfo() + player.getName() + main.msgs .get("race.que.joined"));
+						p.sendMessage(main.colors.getTitle() + "[MarioKart:] "
+								+ main.colors.getInfo() + player.getName()
+								+ main.msgs.get("race.que.joined"));
 					}
 				}
 				plugin.raceQues.setQue(trackName, que);
 				this.reCalculateQues();
-				player.sendMessage(main.colors.getSuccess() + main.msgs.get("race.que.success"));
+				player.sendMessage(main.colors.getSuccess()
+						+ main.msgs.get("race.que.success"));
 
 				player.teleport(track.getLobby(plugin.getServer()));
 
 				String rl = main.config.getString("mariokart.resourcePack");
-				
+
 				Boolean valid = true;
 				try {
 					new URL(rl);
 				} catch (MalformedURLException e2) {
 					valid = false;
 				}
-				if(valid && main.config.getBoolean("bitlyUrlShortner")){
-					//Shorten url
-						player.sendMessage(main.colors.getInfo()+main.msgs.get("resource.download"));
-						//Generic access token: 3676e306c866a24e3586a109b9ddf36f3d177556
-						Url url = Bitly.as("storm345", "R_b0fae26d68750227470cd06b23be70b7").call(Bitly.shorten(rl));
-						player.sendMessage(main.colors.getInfo()+main.msgs.get("resource.downloadHelp")+ChatColor.RESET+" "+url.getShortUrl());
-						player.setTexturePack(rl);
+				if (valid && main.config.getBoolean("bitlyUrlShortner")) {
+					// Shorten url
+					player.sendMessage(main.colors.getInfo()
+							+ main.msgs.get("resource.download"));
+					// Generic access token:
+					// 3676e306c866a24e3586a109b9ddf36f3d177556
+					Url url = Bitly.as("storm345",
+							"R_b0fae26d68750227470cd06b23be70b7").call(
+							Bitly.shorten(rl));
+					player.sendMessage(main.colors.getInfo()
+							+ main.msgs.get("resource.downloadHelp")
+							+ ChatColor.RESET + " " + url.getShortUrl());
+					player.setTexturePack(rl);
+				} else {
+					// Dont shorten url
+					player.sendMessage(main.colors.getInfo()
+							+ main.msgs.get("resource.download"));
+					player.sendMessage(main.colors.getInfo()
+							+ main.msgs.get("resource.downloadHelp")
+							+ ChatColor.RESET + " " + rl);
+					player.setTexturePack(rl);
 				}
-				else{
-					//Dont shorten url
-						player.sendMessage(main.colors.getInfo()+main.msgs.get("resource.download"));
-						player.sendMessage(main.colors.getInfo()+main.msgs.get("resource.downloadHelp")+ChatColor.RESET+" "+rl);
-						player.setTexturePack(rl);
-				}
-				
+
 				return true;
 			}
 		}
 		if (player.isOnline()) {
-			player.sendMessage(main.colors.getError() + main.msgs.get("race.que.full"));
+			player.sendMessage(main.colors.getError()
+					+ main.msgs.get("race.que.full"));
 		}
 		return false;
 	}
@@ -119,7 +136,7 @@ public class RaceScheduler {
 		for (String aname : queNames) {
 			RaceQue que = plugin.raceQues.getQue(aname);
 			List<Player> arenaque = que.getPlayers();
-			
+
 			for (Player player : arenaque) {
 				if (!(player != null && player.isOnline())) {
 					arenaque.remove(player);
@@ -133,7 +150,9 @@ public class RaceScheduler {
 					&& que.getHowManyPlayers() > 0) {
 				timed_valid = true;
 			}
-			if (!trackInUse(aname) && que.getHowManyPlayers() >= main.config.getInt("race.que.minPlayers")
+			if (!trackInUse(aname)
+					&& que.getHowManyPlayers() >= main.config
+							.getInt("race.que.minPlayers")
 					&& !que.getTransitioning()
 					&& !(this.runningGames >= this.maxGames) || timed_valid
 					&& !trackInUse(aname) && !que.getTransitioning()
@@ -149,74 +168,76 @@ public class RaceScheduler {
 				if (!timed) {
 					for (Player player : que.getPlayers()) {
 						String msg = main.msgs.get("race.que.players");
-						
-						msg = msg.replaceAll(Pattern.quote("%time%"), "" + seconds);
-						
+
+						msg = msg.replaceAll(Pattern.quote("%time%"), ""
+								+ seconds);
+
 						player.sendMessage(main.colors.getInfo() + msg);
 					}
 				}
 				if (!timed) {
 					plugin.getServer().getScheduler()
-					.runTaskLater(plugin, new Runnable() {
+							.runTaskLater(plugin, new Runnable() {
 
-						public void run() {
-							String aname = queName;
-							RaceQue arena = main.plugin.raceQues
-									.getQue(aname);
-							if (arena.getHowManyPlayers() < main.config.getInt("race.que.minPlayers")) {
-								arena.setTransitioning(false);
-								plugin.raceQues.setQue(aname, arena);
-								return;
-							}
-							Race game = new Race(arena.getTrack(),
-									arena.getTrack().getTrackName(),
-									arena.getType()); // Add new stuff
-							// when the
-							// system is
-							// ready
-							List<Player> players = arena.getPlayers();
-							for (Player player : players) {
-								game.join(player);
+								public void run() {
+									String aname = queName;
+									RaceQue arena = main.plugin.raceQues
+											.getQue(aname);
+									if (arena.getHowManyPlayers() < main.config
+											.getInt("race.que.minPlayers")) {
+										arena.setTransitioning(false);
+										plugin.raceQues.setQue(aname, arena);
+										return;
+									}
+									Race game = new Race(arena.getTrack(),
+											arena.getTrack().getTrackName(),
+											arena.getType()); // Add new stuff
+									// when the
+									// system is
+									// ready
+									List<Player> players = arena.getPlayers();
+									for (Player player : players) {
+										game.join(player);
 
-								arena.removePlayer(player);
-							}
-							arena.setTransitioning(false);
-							plugin.raceQues.removeQue(aname);
-							startGame(arena, aname, game);
-							return;
-						}
-					}, grace); // 10 seconds
+										arena.removePlayer(player);
+									}
+									arena.setTransitioning(false);
+									plugin.raceQues.removeQue(aname);
+									startGame(arena, aname, game);
+									return;
+								}
+							}, grace); // 10 seconds
 				} else {
 					plugin.getServer().getScheduler()
-					.runTask(plugin, new Runnable() {
+							.runTask(plugin, new Runnable() {
 
-						public void run() {
-							String aname = queName;
-							RaceQue arena = main.plugin.raceQues
-									.getQue(aname);
-							if (arena.getHowManyPlayers() < 1) {
-								arena.setTransitioning(false);
-								plugin.raceQues.removeQue(aname);
-								return;
-							}
-							Race game = new Race(arena.getTrack(),
-									arena.getTrack().getTrackName(),
-									arena.getType()); // Add new stuff
-							// when the
-							// system is
-							// ready
-							
-							for (Player player : arena.getPlayers()) {
-								game.join(player);
-								
-								arena.removePlayer(player);
-							}
-							arena.setTransitioning(false);
-							plugin.raceQues.removeQue(aname);
-							startGame(arena, aname, game);
-							return;
-						}
-					});
+								public void run() {
+									String aname = queName;
+									RaceQue arena = main.plugin.raceQues
+											.getQue(aname);
+									if (arena.getHowManyPlayers() < 1) {
+										arena.setTransitioning(false);
+										plugin.raceQues.removeQue(aname);
+										return;
+									}
+									Race game = new Race(arena.getTrack(),
+											arena.getTrack().getTrackName(),
+											arena.getType()); // Add new stuff
+									// when the
+									// system is
+									// ready
+
+									for (Player player : arena.getPlayers()) {
+										game.join(player);
+
+										arena.removePlayer(player);
+									}
+									arena.setTransitioning(false);
+									plugin.raceQues.removeQue(aname);
+									startGame(arena, aname, game);
+									return;
+								}
+							});
 				}
 			}
 		}
@@ -231,12 +252,12 @@ public class RaceScheduler {
 			try {
 				player = user.getPlayer(plugin.getServer());
 			} catch (PlayerQuitException e) {
-				//User has left
+				// User has left
 			}
 			user.setOldInventory(player.getInventory().getContents().clone());
-			if(player != null){
-			player.getInventory().clear();
-			player.setGameMode(GameMode.SURVIVAL);
+			if (player != null) {
+				player.getInventory().clear();
+				player.setGameMode(GameMode.SURVIVAL);
 			}
 		}
 		final ArrayList<Minecart> cars = new ArrayList<Minecart>();
@@ -266,22 +287,24 @@ public class RaceScheduler {
 				try {
 					p = users.get(randomNumber).getPlayer(plugin.getServer());
 				} catch (PlayerQuitException e) {
-					//Player has left
+					// Player has left
 				}
 				users.remove(user);
 				Location loc = grid.get(i);
-				if(p!=null){
-				if (p.getVehicle() != null) {
-					p.getVehicle().eject();
-				}
-				p.teleport(loc.add(0, 2, 0));
-				Minecart car = (Minecart) loc.getWorld().spawnEntity(
-						loc.add(0, 0.2, 0), EntityType.MINECART);
-				car.setMetadata("car.frozen", new StatValue(null, main.plugin));
-				car.setMetadata("kart.racing", new StatValue(null, main.plugin));
-				car.setPassenger(p);
-				p.setMetadata("car.stayIn", new StatValue(null, plugin));
-				cars.add(car);
+				if (p != null) {
+					if (p.getVehicle() != null) {
+						p.getVehicle().eject();
+					}
+					p.teleport(loc.add(0, 2, 0));
+					Minecart car = (Minecart) loc.getWorld().spawnEntity(
+							loc.add(0, 0.2, 0), EntityType.MINECART);
+					car.setMetadata("car.frozen", new StatValue(null,
+							main.plugin));
+					car.setMetadata("kart.racing", new StatValue(null,
+							main.plugin));
+					car.setPassenger(p);
+					p.setMetadata("car.stayIn", new StatValue(null, plugin));
+					cars.add(car);
 				}
 			}
 		}
@@ -289,9 +312,10 @@ public class RaceScheduler {
 			User user = users.get(0);
 			try {
 				Player p = user.getPlayer(plugin.getServer());
-				p.sendMessage(main.colors.getError() + main.msgs.get("race.que.full"));
+				p.sendMessage(main.colors.getError()
+						+ main.msgs.get("race.que.full"));
 			} catch (PlayerQuitException e) {
-				//Player has left anyway
+				// Player has left anyway
 			}
 			race.leave(user, true);
 		}
@@ -301,73 +325,88 @@ public class RaceScheduler {
 			try {
 				player = user.getPlayer(plugin.getServer());
 				user.setLocation(player.getLocation().clone());
-				player.sendMessage(main.colors.getInfo() + main.msgs.get("race.que.preparing"));
+				player.sendMessage(main.colors.getInfo()
+						+ main.msgs.get("race.que.preparing"));
 			} catch (PlayerQuitException e) {
-				//Player has left
+				// Player has left
 			}
 		}
 		final List<User> users2 = race.getUsers();
-		for (User user2 : users2){
+		for (User user2 : users2) {
 			user2.setInRace(true);
 		}
 		plugin.getServer().getScheduler()
-		.runTaskAsynchronously(plugin, new Runnable() {
-			public void run() {
-				for (User user : users2) {
-					try {
-						user.getPlayer(plugin.getServer()).sendMessage(main.colors.getInfo() + main.msgs.get("race.que.starting"));
-					} catch (PlayerQuitException e) {
-						//User has left
-					}
-				}
-				for (int i = 10; i > 0; i--) {
-					try {
-						if (i == 10) {
+				.runTaskAsynchronously(plugin, new Runnable() {
+					public void run() {
+						for (User user : users2) {
 							try {
-								Player player = users.get(0).getPlayer(plugin.getServer());
-								player.getWorld().playSound(player.getLocation(), Sound.BREATH, 8, 1);
-							} catch (Exception e) {
-								//Player has left
+								user.getPlayer(plugin.getServer())
+										.sendMessage(
+												main.colors.getInfo()
+														+ main.msgs
+																.get("race.que.starting"));
+							} catch (PlayerQuitException e) {
+								// User has left
 							}
 						}
-						if (i == 3) {
+						for (int i = 10; i > 0; i--) {
 							try {
-								Player player = users.get(0).getPlayer(plugin.getServer());
-								player.getWorld().playSound(player.getLocation(), Sound.NOTE_BASS_DRUM, 8, 1);
+								if (i == 10) {
+									try {
+										Player player = users.get(0).getPlayer(
+												plugin.getServer());
+										player.getWorld().playSound(
+												player.getLocation(),
+												Sound.BREATH, 8, 1);
+									} catch (Exception e) {
+										// Player has left
+									}
+								}
+								if (i == 3) {
+									try {
+										Player player = users.get(0).getPlayer(
+												plugin.getServer());
+										player.getWorld().playSound(
+												player.getLocation(),
+												Sound.NOTE_BASS_DRUM, 8, 1);
+									} catch (Exception e) {
+										// Player has left
+									}
+								}
 							} catch (Exception e) {
-								//Player has left
+								// Game ended
+							}
+							for (User user : users2) {
+								try {
+									Player p = user.getPlayer(plugin
+											.getServer());
+									p.sendMessage(main.colors.getInfo() + ""
+											+ i);
+								} catch (PlayerQuitException e) {
+									// Player has left
+								}
+							}
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e1) {
 							}
 						}
-					} catch (Exception e) {
-						// Game ended
-					}
-					for (User user : users2) {
-						try {
-							Player p = user.getPlayer(plugin.getServer());
-							p.sendMessage(main.colors.getInfo() + "" + i);
-						} catch (PlayerQuitException e) {
-							//Player has left
+						for (Minecart car : cars) {
+							car.removeMetadata("car.frozen", main.plugin);
 						}
+						for (User user : users2) {
+							try {
+								user.getPlayer(plugin.getServer()).sendMessage(
+										main.colors.getInfo()
+												+ main.msgs.get("race.que.go"));
+							} catch (PlayerQuitException e) {
+								// Player has left
+							}
+						}
+						race.start();
+						return;
 					}
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e1) {
-					}
-				}
-				for (Minecart car : cars) {
-					car.removeMetadata("car.frozen", main.plugin);
-				}
-				for (User user : users2) {
-					try {
-						user.getPlayer(plugin.getServer()).sendMessage(main.colors.getInfo() + main.msgs.get("race.que.go"));
-					} catch (PlayerQuitException e) {
-						//Player has left
-					}
-				}
-				race.start();
-				return;
-			}
-		});
+				});
 
 		return;
 	}
@@ -390,10 +429,12 @@ public class RaceScheduler {
 		if (getQue(arena).contains(player)) {
 			arena.removePlayer(player);
 		}
-		
+
 		for (Player p : getQue(arena)) {
 			if (p != null && p.isOnline()) {
-				p.sendMessage(main.colors.getTitle() + "[MarioKart:] " + main.colors.getInfo() + player.getName() + main.msgs.get("race.que.left"));
+				p.sendMessage(main.colors.getTitle() + "[MarioKart:] "
+						+ main.colors.getInfo() + player.getName()
+						+ main.msgs.get("race.que.left"));
 			}
 		}
 		reCalculateQues();

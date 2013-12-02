@@ -94,7 +94,7 @@ public class URaceListener implements Listener {
 
 			public void run() {
 				car.getLocation().getWorld()
-				.playSound(car.getLocation(), Sound.WOOD_CLICK, 1f, 1f);
+						.playSound(car.getLocation(), Sound.WOOD_CLICK, 1f, 1f);
 				car.removeMetadata("car.frozen", plugin);
 			}
 		}, (time * 20));
@@ -256,9 +256,9 @@ public class URaceListener implements Listener {
 				String msg = main.msgs.get("mario.hit");
 				msg = msg.replaceAll(Pattern.quote("%name%"), "tracking shell");
 				target.getLocation()
-				.getWorld()
-				.playSound(target.getLocation(), Sound.ENDERDRAGON_HIT,
-						1, 0.8f);
+						.getWorld()
+						.playSound(target.getLocation(), Sound.ENDERDRAGON_HIT,
+								1, 0.8f);
 				target.sendMessage(ChatColor.RED + msg);
 				penalty(((Minecart) target.getVehicle()), 4);
 				shell.setMetadata("shell.destroy", new StatValue(0, plugin));
@@ -287,9 +287,9 @@ public class URaceListener implements Listener {
 								msg = msg.replaceAll(Pattern.quote("%name%"),
 										"green shell");
 								pl.getLocation()
-								.getWorld()
-								.playSound(pl.getLocation(),
-										Sound.ENDERDRAGON_HIT, 1, 0.8f);
+										.getWorld()
+										.playSound(pl.getLocation(),
+												Sound.ENDERDRAGON_HIT, 1, 0.8f);
 								pl.sendMessage(ChatColor.RED + msg);
 								penalty(((Minecart) pl.getVehicle()), 4);
 								shell.setMetadata("shell.destroy",
@@ -345,11 +345,12 @@ public class URaceListener implements Listener {
 			try {
 				player = user.getPlayer(plugin.getServer());
 			} catch (PlayerQuitException e1) {
-				//Player has left
+				// Player has left
 			}
-			if(player != null){
+			if (player != null) {
 				player.removeMetadata("car.stayIn", plugin);
-				player.setCustomName(ChatColor.stripColor(player.getCustomName()));
+				player.setCustomName(ChatColor.stripColor(player
+						.getCustomName()));
 				player.setCustomNameVisible(false);
 				if (player.getVehicle() != null) {
 					Vehicle veh = (Vehicle) player.getVehicle();
@@ -360,7 +361,8 @@ public class URaceListener implements Listener {
 				}
 				Location loc = game.getTrack().getExit(plugin.getServer());
 				if (loc == null) {
-					player.teleport(player.getLocation().getWorld().getSpawnLocation());
+					player.teleport(player.getLocation().getWorld()
+							.getSpawnLocation());
 				} else {
 					player.teleport(loc);
 				}
@@ -377,15 +379,17 @@ public class URaceListener implements Listener {
 				for (User u : game.getUsers()) {
 					try {
 						Player pp = u.getPlayer(plugin.getServer());
-						if (pp != null){
+						if (pp != null) {
 							if (pp.hasMetadata("checkpoint.distance")) {
 								List<MetadataValue> metas = pp
 										.getMetadata("checkpoint.distance");
-								checkpointDists.put(u,  (Double) ((StatValue) metas.get(0)).getValue());
+								checkpointDists.put(u,
+										(Double) ((StatValue) metas.get(0))
+												.getValue());
 							}
 						}
 					} catch (PlayerQuitException e) {
-						//Player has left
+						// Player has left
 					}
 				}
 
@@ -397,7 +401,8 @@ public class URaceListener implements Listener {
 
 						double distance = 1 / (checkpointDists.get(u));
 
-						double score = (laps * game.getMaxCheckpoints()) + checkpoints + distance;
+						double score = (laps * game.getMaxCheckpoints())
+								+ checkpoints + distance;
 
 						try {
 							if (game.getWinner().equals(u)) {
@@ -407,7 +412,7 @@ public class URaceListener implements Listener {
 						}
 						scores.put(u.getPlayerName(), score);
 					} catch (Exception e) {
-						//User has left
+						// User has left
 					}
 				}
 			}
@@ -417,23 +422,44 @@ public class URaceListener implements Listener {
 
 			if (!finished) {
 				DoubleValueComparator com = new DoubleValueComparator(scores);
-				SortedMap<String, Double> sorted = new TreeMap<String, Double>(com);
+				SortedMap<String, Double> sorted = new TreeMap<String, Double>(
+						com);
 				sorted.putAll(scores);
 				Set<String> keys = sorted.keySet();
 				Object[] pls = (Object[]) keys.toArray();
 				for (int i = 0; i < pls.length; i++) {
-					Player p = plugin.getServer().getPlayer((String) pls[i]); //Evidence the dodgy PR was not tested as it was still reading string with Player in the map
+					Player p = plugin.getServer().getPlayer((String) pls[i]); // Evidence
+																				// the
+																				// dodgy
+																				// PR
+																				// was
+																				// not
+																				// tested
+																				// as
+																				// it
+																				// was
+																				// still
+																				// reading
+																				// string
+																				// with
+																				// Player
+																				// in
+																				// the
+																				// map
 					if (p.equals(player)) {
 						if (p != null) {
 							String msg = "";
 							if (!timed) {
 								msg = main.msgs.get("race.end.position");
 								if ((i + 1) <= 4
-										&& (i + 1) != game.getUsers().size()) {player.getWorld().playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 1, 1);
+										&& (i + 1) != game.getUsers().size()) {
+									player.getWorld().playSound(
+											player.getLocation(),
+											Sound.NOTE_BASS_GUITAR, 1, 1);
 								} else {
 									player.getWorld().playSound(
-											player.getLocation(), Sound.NOTE_BASS,
-											1, 1);
+											player.getLocation(),
+											Sound.NOTE_BASS, 1, 1);
 								}
 								String pos = "" + (i + 1);
 								if (pos.endsWith("1")) {
@@ -500,9 +526,8 @@ public class URaceListener implements Listener {
 						double t = ti / 100;
 						msg = main.msgs.get("race.end.time");
 						msg = msg.replaceAll(Pattern.quote("%time%"), t + "");
-						plugin.raceTimes
-						.addRaceTime(game.getTrack().getTrackName(),
-								player.getName(), t);
+						plugin.raceTimes.addRaceTime(game.getTrack()
+								.getTrackName(), player.getName(), t);
 					}
 					player.sendMessage(main.colors.getSuccess() + msg);
 				}
@@ -514,28 +539,29 @@ public class URaceListener implements Listener {
 				game.end();
 			}
 			final Player pl = player;
-			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+			plugin.getServer().getScheduler()
+					.runTaskLater(plugin, new Runnable() {
 
-				public void run() {
-					String rl = main.config
-							.getString("mariokart.resourceNonMarioPack");
-					Boolean valid = true;
-					try {
-						new URL(rl);
-					} catch (MalformedURLException e2) {
-						valid = false;
-					}
-					if (valid) {
-						pl.sendMessage(main.colors.getInfo()
-								+ main.msgs.get("resource.clear"));
-						pl.setTexturePack(rl);
-					}
-					return;
-				}
-			}, 150l);
+						public void run() {
+							String rl = main.config
+									.getString("mariokart.resourceNonMarioPack");
+							Boolean valid = true;
+							try {
+								new URL(rl);
+							} catch (MalformedURLException e2) {
+								valid = false;
+							}
+							if (valid) {
+								pl.sendMessage(main.colors.getInfo()
+										+ main.msgs.get("resource.clear"));
+								pl.setTexturePack(rl);
+							}
+							return;
+						}
+					}, 150l);
 			return;
 		} catch (IllegalArgumentException e) {
-			//Player has left (Silly User system breaking everything...)
+			// Player has left (Silly User system breaking everything...)
 		}
 	}
 
@@ -609,7 +635,7 @@ public class URaceListener implements Listener {
 				player.getInventory().setItem(8, main.marioKart.respawn);
 				player.updateInventory();
 			} catch (PlayerQuitException e) {
-				//Player has left
+				// Player has left
 			}
 		}
 		users = game.getUsers();
@@ -621,9 +647,10 @@ public class URaceListener implements Listener {
 			msg = msg.replaceAll(Pattern.quote("%lap%"), "" + 1);
 			msg = msg.replaceAll(Pattern.quote("%total%"), "" + game.totalLaps);
 			try {
-				user.getPlayer(plugin.getServer()).sendMessage(main.colors.getInfo() + msg);
+				user.getPlayer(plugin.getServer()).sendMessage(
+						main.colors.getInfo() + msg);
 			} catch (PlayerQuitException e) {
-				//Player has left
+				// Player has left
 			}
 		}
 		game.setUsers(users);
@@ -720,14 +747,19 @@ public class URaceListener implements Listener {
 									Player p;
 									try {
 										p = u.getPlayer(plugin.getServer());
-										String msg = main.msgs.get("race.end.soon");
-										msg = msg.replaceAll("%name%", p.getName());
-										p.sendMessage(main.colors.getSuccess() + game.getWinner() + main.msgs.get("race.end.won"));
-										p.sendMessage(main.colors.getInfo() + msg);
+										String msg = main.msgs
+												.get("race.end.soon");
+										msg = msg.replaceAll("%name%",
+												p.getName());
+										p.sendMessage(main.colors.getSuccess()
+												+ game.getWinner()
+												+ main.msgs.get("race.end.won"));
+										p.sendMessage(main.colors.getInfo()
+												+ msg);
 									} catch (PlayerQuitException e) {
-										//Player has left
+										// Player has left
 									}
-									
+
 								}
 							}
 						}
@@ -826,7 +858,7 @@ public class URaceListener implements Listener {
 			} catch (NumberFormatException e) {
 			}
 			main.cmdExecutor.urace(event.getPlayer(), new String[] { "list",
-				"" + page }, event.getPlayer());
+					"" + page }, event.getPlayer());
 		} else if (cmd.equalsIgnoreCase("leave")
 				|| cmd.equalsIgnoreCase("quit") || cmd.equalsIgnoreCase("exit")) {
 			main.cmdExecutor.urace(event.getPlayer(), new String[] { "leave" },
@@ -835,12 +867,12 @@ public class URaceListener implements Listener {
 			String mode = ChatColor.stripColor(lines[3]);
 			if (mode.length() > 0) {
 				main.cmdExecutor.urace(event.getPlayer(), new String[] {
-					"join", ChatColor.stripColor(lines[2]).toLowerCase(),
-					mode }, event.getPlayer());
+						"join", ChatColor.stripColor(lines[2]).toLowerCase(),
+						mode }, event.getPlayer());
 			} else {
 				main.cmdExecutor.urace(event.getPlayer(), new String[] {
-					"join", ChatColor.stripColor(lines[2]).toLowerCase() },
-					event.getPlayer());
+						"join", ChatColor.stripColor(lines[2]).toLowerCase() },
+						event.getPlayer());
 			}
 		}
 		return;
@@ -890,11 +922,11 @@ public class URaceListener implements Listener {
 						.spawnEntity(above, EntityType.ENDER_CRYSTAL);
 				above.getBlock().setType(Material.COAL_BLOCK);
 				above.getBlock().getRelative(BlockFace.WEST)
-				.setType(Material.COAL_BLOCK);
+						.setType(Material.COAL_BLOCK);
 				above.getBlock().getRelative(BlockFace.NORTH)
-				.setType(Material.COAL_BLOCK);
+						.setType(Material.COAL_BLOCK);
 				above.getBlock().getRelative(BlockFace.NORTH_WEST)
-				.setType(Material.COAL_BLOCK);
+						.setType(Material.COAL_BLOCK);
 				crystal.setFireTicks(0);
 				crystal.setMetadata("race.pickup", new StatValue(true, plugin));
 				text = false;
@@ -929,11 +961,11 @@ public class URaceListener implements Listener {
 				EntityType.ENDER_CRYSTAL);
 		above.getBlock().setType(Material.COAL_BLOCK);
 		above.getBlock().getRelative(BlockFace.WEST)
-		.setType(Material.COAL_BLOCK);
+				.setType(Material.COAL_BLOCK);
 		above.getBlock().getRelative(BlockFace.NORTH)
-		.setType(Material.COAL_BLOCK);
+				.setType(Material.COAL_BLOCK);
 		above.getBlock().getRelative(BlockFace.NORTH_WEST)
-		.setType(Material.COAL_BLOCK);
+				.setType(Material.COAL_BLOCK);
 		newC.setFireTicks(0);
 		newC.setMetadata("race.pickup", new StatValue(true, plugin));
 		// }
@@ -954,11 +986,11 @@ public class URaceListener implements Listener {
 				EntityType.ENDER_CRYSTAL);
 		above.getBlock().setType(Material.COAL_BLOCK);
 		above.getBlock().getRelative(BlockFace.WEST)
-		.setType(Material.COAL_BLOCK);
+				.setType(Material.COAL_BLOCK);
 		above.getBlock().getRelative(BlockFace.NORTH)
-		.setType(Material.COAL_BLOCK);
+				.setType(Material.COAL_BLOCK);
 		above.getBlock().getRelative(BlockFace.NORTH_WEST)
-		.setType(Material.COAL_BLOCK);
+				.setType(Material.COAL_BLOCK);
 		newC.setFireTicks(0);
 		newC.setMetadata("race.pickup", new StatValue(true, plugin));
 	}
@@ -1066,7 +1098,7 @@ public class URaceListener implements Listener {
 		int checkpoint = 0;
 		try {
 			User user = race.getUser(player);
-			
+
 			checkpoint = user.getCheckpoint();
 		} catch (Exception e) {
 		}
