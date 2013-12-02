@@ -487,7 +487,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 			}
 			if (game) {
-				race.leave(race.getUser(player.getName()), true);
+				race.leave(race.getUser(player), true);
 			} else {
 				RaceQue queue = plugin.raceQues.getQue(que);
 				plugin.gameScheduler.leaveQue(player, queue, queue.getTrack()
