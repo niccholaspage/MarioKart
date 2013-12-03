@@ -26,12 +26,7 @@ import com.rosaloves.bitlyj.Bitly;
 import com.rosaloves.bitlyj.Url;
 import com.useful.ucarsCommon.StatValue;
 
-/*
- * An adaptation of a game scheduler written for Minigamez but was never released. -Code is messy and 
- * weirdly named as a result
- */
 public class RaceScheduler {
-	// NOTE: This code is probably highly extraneous in places.
 	private HashMap<String, Race> games = new HashMap<String, Race>();
 	private MarioKart plugin;
 	Random random = null;
@@ -44,8 +39,7 @@ public class RaceScheduler {
 		this.maxGames = MarioKart.config.getInt("general.raceLimit");
 	}
 
-	public Boolean joinGame(Player player, RaceTrack track, RaceQue que,
-			String trackName) {
+	public Boolean joinGame(Player player, RaceTrack track, RaceQue que, String trackName) {
 		que.validatePlayers();
 		if (que.getHowManyPlayers() < que.getPlayerLimit()
 				&& player.isOnline()
