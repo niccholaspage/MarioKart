@@ -140,7 +140,7 @@ public class Race {
 
 	public Boolean join(Player player) {
 		if (users.size() < this.track.getMaxPlayers()) {
-			User user = new User(player, player.getLevel(), player.getExp());
+			User user = new User(player);
 			users.add(user);
 			return true;
 		}
