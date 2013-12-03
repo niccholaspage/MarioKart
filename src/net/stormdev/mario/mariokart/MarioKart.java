@@ -1,4 +1,5 @@
 package net.stormdev.mario.mariokart;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,12 +24,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.useful.ucars.Colors;
 import com.useful.ucars.ucars;
-public class MarioKart extends JavaPlugin {
-    public YamlConfiguration lang = new YamlConfiguration();
-    public static MarioKart plugin;
+
+public class MarioKart extends JavaPlugin
+{
+    public YamlConfiguration lang = new YamlConfiguration(); //TODO: Fe's lang stuff
     public static FileConfiguration config = new YamlConfiguration();
+    public static MarioKart plugin;
     public static Colors colors;
-    public static CustomLogger logger = null;
     public static ucars ucars = null;
     public static URaceCommandExecutor cmdExecutor = null;
     public static URaceListener listener = null;
@@ -42,11 +44,11 @@ public class MarioKart extends JavaPlugin {
     public Random random = null;
     public static MarioKartStuff marioKart = null;
     public RaceTimes raceTimes = null;
-    public void onEnable() {
+    public void onEnable()
+    {
         random = new Random();
         plugin = this;
-        File langFile = new File(getDataFolder().getAbsolutePath()
-        + File.separator + "lang.yml");
+        File langFile = new File(getDataFolder() + File.separator + "lang.yml");
         if (langFile.exists() == false || langFile.length() < 1) {
             try {
                 langFile.createNewFile();
@@ -78,7 +80,6 @@ public class MarioKart extends JavaPlugin {
             copy(getResource("marioKartConfigHeader.yml"), configFile);
         }
         config = getConfig();
-        logger = new CustomLogger(getServer().getConsoleSender(), getLogger());
         try {
             // Setup the Lang file
             if (!lang.contains("general.cmd.leave.success")) {
@@ -331,36 +332,20 @@ public class MarioKart extends JavaPlugin {
         config.getString("colorScheme.info"),
         config.getString("colorScheme.title"),
         config.getString("colorScheme.title"));
-        logger.info("Config loaded!");
-        logger.info("Searching for uCars...");
-        Plugin[] plugins = getServer().getPluginManager().getPlugins();
-        Boolean installed = false;
-        for (Plugin p : plugins) {
-            if (p.getName().equals("uCars")) {
-                installed = true;
-                ucars = (com.useful.ucars.ucars) p;
-            }
-        }
-        if (!installed) {
-            logger.info("Unable to find uCars!");
+        getLogger().info("Config loaded!");
+        getLogger().info("Searching for uCars...");
+        ucars = (ucars) getServer().getPluginManager().getPlugin("uCars"); //Should work
+        if (ucars == null) {
+            getLogger().info("Unable to find uCars!");
             getServer().getPluginManager().disablePlugin(this);
         }
         ucars.hookPlugin(this);
-        logger.info("uCars found and hooked!");
-        PluginDescriptionFile pldesc = plugin.getDescription();
-        Map<String, Map<String, Object>> commands = pldesc.getCommands();
-        Set<String> keys = commands.keySet();
-        MarioKart.cmdExecutor = new URaceCommandExecutor(this);
-        for (String k : keys) {
-            try {
-                getCommand(k).setExecutor(cmdExecutor);
-            }
-            catch (Exception e) {
-                getLogger().log(Level.SEVERE,
-                "Error registering command " + k.toString());
-                e.printStackTrace();
-            }
-        }
+        getLogger().info("uCars found and hooked!");
+        
+        getCommand("marioRaceAdmin").setExecutor(cmdExecutor);
+        getCommand("race").setExecutor(cmdExecutor);
+        getCommand("racetimes").setExecutor(cmdExecutor); //Replace crappy code that scanns plugin.yml
+        
         MarioKart.listener = new URaceListener(this);
         getServer().getPluginManager().registerEvents(MarioKart.listener, this);
         this.trackManager = new RaceTrackManager(this, new File(getDataFolder()
@@ -375,8 +360,6 @@ public class MarioKart extends JavaPlugin {
         + File.separator + "Data" + File.separator
         + "raceTimes.uracetimes"),
         config.getBoolean("general.race.timed.log"));
-        logger.info("MarioKart v" + plugin.getDescription().getVersion()
-        + " has been enabled!");
     }
     public void onDisable() {
         if (ucars != null) {

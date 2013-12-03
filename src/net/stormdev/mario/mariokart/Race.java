@@ -363,7 +363,7 @@ public class Race {
 			MarioKart.plugin.getServer().getPluginManager()
 			.callEvent(new RaceStartEvent(this));
 		} catch (Exception e) {
-			MarioKart.logger.log("Error starting race!", Level.SEVERE);
+			MarioKart.plugin.getLogger().severe("Error starting race!");
 			end();
 		}
 		return;
