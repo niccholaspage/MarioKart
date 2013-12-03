@@ -20,9 +20,9 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.inventory.ItemStack;
 
 public class URaceCommandExecutor implements CommandExecutor {
-	main plugin = null;
+	MarioKart plugin = null;
 
-	public URaceCommandExecutor(main plugin) {
+	public URaceCommandExecutor(MarioKart plugin) {
 		this.plugin = plugin;
 	}
 
@@ -40,8 +40,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 			if (command.equalsIgnoreCase("create")) {
 				// /urace create [TrackName]
 				if (player == null) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("general.cmd.playersOnly"));
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("general.cmd.playersOnly"));
 					return true;
 				}
 				if (args.length < 3) {
@@ -58,18 +58,18 @@ public class URaceCommandExecutor implements CommandExecutor {
 					laps = 1;
 				}
 				if (plugin.trackManager.raceTrackExists(trackname)) {
-					String msg = main.msgs.get("setup.create.exists");
+					String msg = MarioKart.msgs.get("setup.create.exists");
 					msg = msg.replaceAll(Pattern.quote("%name%"), trackname);
-					sender.sendMessage(main.colors.getError() + msg);
+					sender.sendMessage(MarioKart.colors.getError() + msg);
 					return true;
 				}
-				int id = main.config.getInt("setup.create.wand");
+				int id = MarioKart.config.getInt("setup.create.wand");
 				ItemStack named = new ItemStack(id);
-				String start = main.msgs.get("setup.create.start");
+				String start = MarioKart.msgs.get("setup.create.start");
 				start = start.replaceAll(Pattern.quote("%id%"), "" + id);
 				start = start.replaceAll(Pattern.quote("%name%"), named
 						.getType().name().toLowerCase());
-				sender.sendMessage(main.colors.getInfo() + start);
+				sender.sendMessage(MarioKart.colors.getInfo() + start);
 				RaceTrack track = new RaceTrack(trackname, 2, 2, laps);
 				new TrackCreator(player, track); // Create the track
 				return true;
@@ -79,14 +79,14 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 				String trackname = args[1];
 				if (!plugin.trackManager.raceTrackExists(trackname)) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("general.cmd.delete.exists"));
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("general.cmd.delete.exists"));
 					return true;
 				}
 				plugin.trackManager.deleteRaceTrack(trackname);
-				String msg = main.msgs.get("general.cmd.delete.success");
+				String msg = MarioKart.msgs.get("general.cmd.delete.success");
 				msg = msg.replaceAll("%name%", trackname);
-				sender.sendMessage(main.colors.getSuccess() + msg);
+				sender.sendMessage(MarioKart.colors.getSuccess() + msg);
 				return true;
 			} else if (command.equalsIgnoreCase("list")) {
 				int page = 1;
@@ -119,11 +119,11 @@ public class URaceCommandExecutor implements CommandExecutor {
 				if (page < 0) {
 					page = 0;
 				}
-				String msg = main.msgs.get("general.cmd.page");
+				String msg = MarioKart.msgs.get("general.cmd.page");
 				msg = msg.replaceAll(Pattern.quote("%page%"), "" + (page + 1));
 				msg = msg.replaceAll(Pattern.quote("%total%"), ""
 						+ (totalpages + 1));
-				sender.sendMessage(main.colors.getTitle() + msg);
+				sender.sendMessage(MarioKart.colors.getTitle() + msg);
 				for (int i = pos; i < (i + 6) && i < names.size(); i++) {
 					String Trackname = names.get(i);
 					char[] chars = Trackname.toCharArray();
@@ -132,7 +132,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 						s = s.toUpperCase();
 						Trackname = s + Trackname.substring(1);
 					}
-					sender.sendMessage(main.colors.getInfo() + Trackname);
+					sender.sendMessage(MarioKart.colors.getInfo() + Trackname);
 				}
 				return true;
 			} else if (command.equalsIgnoreCase("setLaps")) {
@@ -141,8 +141,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 				String trackname = args[1];
 				if (!plugin.trackManager.raceTrackExists(trackname)) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("general.cmd.delete.exists"));
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("general.cmd.delete.exists"));
 					return true;
 				}
 				String lapsStr = args[2];
@@ -154,11 +154,11 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 				plugin.trackManager.getRaceTrack(trackname).laps = laps;
 				plugin.trackManager.save();
-				String msg = main.msgs.get("general.cmd.setlaps.success");
+				String msg = MarioKart.msgs.get("general.cmd.setlaps.success");
 				msg = msg.replaceAll(Pattern.quote("%name%"),
 						plugin.trackManager.getRaceTrack(trackname)
 								.getTrackName());
-				sender.sendMessage(main.colors.getSuccess() + msg);
+				sender.sendMessage(MarioKart.colors.getSuccess() + msg);
 				return true;
 			}
 			return false;
@@ -187,16 +187,16 @@ public class URaceCommandExecutor implements CommandExecutor {
 			SortedMap<String, Double> topTimes = plugin.raceTimes.getTopTimes(
 					d, trackName);
 			Map<String, Double> times = plugin.raceTimes.getTimes(trackName);
-			String msg = main.msgs.get("general.cmd.racetimes");
+			String msg = MarioKart.msgs.get("general.cmd.racetimes");
 			msg = msg.replaceAll(Pattern.quote("%n%"), d + "");
 			msg = msg.replaceAll(Pattern.quote("%track%"), trackName);
-			sender.sendMessage(main.colors.getTitle() + msg);
+			sender.sendMessage(MarioKart.colors.getTitle() + msg);
 			Object[] keys = topTimes.keySet().toArray();
 			int pos = 1;
 			for (Object o : keys) {
 				String name = (String) o;
-				sender.sendMessage(main.colors.getTitle() + pos + ")"
-						+ main.colors.getInfo() + name + "- " + times.get(name)
+				sender.sendMessage(MarioKart.colors.getTitle() + pos + ")"
+						+ MarioKart.colors.getInfo() + name + "- " + times.get(name)
 						+ "s");
 				pos++;
 			}
@@ -241,11 +241,11 @@ public class URaceCommandExecutor implements CommandExecutor {
 			if (page < 0) {
 				page = 0;
 			}
-			String msg = main.msgs.get("general.cmd.page");
+			String msg = MarioKart.msgs.get("general.cmd.page");
 			msg = msg.replaceAll(Pattern.quote("%page%"), "" + (page + 1));
 			msg = msg.replaceAll(Pattern.quote("%total%"), ""
 					+ (totalpages + 1));
-			sender.sendMessage(main.colors.getTitle() + msg);
+			sender.sendMessage(MarioKart.colors.getTitle() + msg);
 			for (int i = pos; i < (i + 6) && i < names.size(); i++) {
 				String Trackname = names.get(i);
 				char[] chars = Trackname.toCharArray();
@@ -254,13 +254,13 @@ public class URaceCommandExecutor implements CommandExecutor {
 					s = s.toUpperCase();
 					Trackname = s + Trackname.substring(1);
 				}
-				sender.sendMessage(main.colors.getInfo() + Trackname);
+				sender.sendMessage(MarioKart.colors.getInfo() + Trackname);
 			}
 			return true;
 		} else if (command.equalsIgnoreCase("join")) {
 			if (player == null) {
-				sender.sendMessage(main.colors.getError()
-						+ main.msgs.get("general.cmd.playersOnly"));
+				sender.sendMessage(MarioKart.colors.getError()
+						+ MarioKart.msgs.get("general.cmd.playersOnly"));
 				return true;
 			}
 			String trackName = null;
@@ -288,10 +288,10 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 			}
 			if (trackName.equalsIgnoreCase("auto")) {
-				if (main.plugin.raceMethods.inAGame(player) != null
-						|| main.plugin.raceMethods.inGameQue(player) != null) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("race.que.existing"));
+				if (MarioKart.plugin.raceMethods.inAGame(player) != null
+						|| MarioKart.plugin.raceMethods.inGameQue(player) != null) {
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("race.que.existing"));
 					return true;
 				}
 				List<String> gameArenas = new ArrayList<String>();
@@ -326,21 +326,21 @@ public class URaceCommandExecutor implements CommandExecutor {
 				if (order.size() < 1) {
 					// Create a random raceQue
 					int min = 0;
-					int max = main.plugin.trackManager.getRaceTracks().size() - 1;
-					if (main.plugin.trackManager.getRaceTracks().size() < 1) {
+					int max = MarioKart.plugin.trackManager.getRaceTracks().size() - 1;
+					if (MarioKart.plugin.trackManager.getRaceTracks().size() < 1) {
 						// No tracks created
-						sender.sendMessage(main.colors.getError()
-								+ main.msgs.get("general.cmd.full"));
+						sender.sendMessage(MarioKart.colors.getError()
+								+ MarioKart.msgs.get("general.cmd.full"));
 						return true;
 					}
 					int randomNumber;
 					try {
-						randomNumber = main.plugin.random.nextInt(max - min)
+						randomNumber = MarioKart.plugin.random.nextInt(max - min)
 								+ min;
 					} catch (Exception e) {
 						randomNumber = 0;
 					}
-					RaceTrack track = main.plugin.trackManager.getRaceTracks()
+					RaceTrack track = MarioKart.plugin.trackManager.getRaceTracks()
 							.get(randomNumber);
 					RaceQue que = new RaceQue(track, type);
 					plugin.gameScheduler.joinGame(player, track, que,
@@ -357,8 +357,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 				RaceTrack track = plugin.trackManager.getRaceTrack(name);
 				if (track == null) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("general.cmd.delete.exists"));
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("general.cmd.delete.exists"));
 					return true;
 				}
 				if (player.getVehicle() != null) {
@@ -371,14 +371,14 @@ public class URaceCommandExecutor implements CommandExecutor {
 			} else {
 				RaceTrack track = plugin.trackManager.getRaceTrack(trackName);
 				if (track == null) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("general.cmd.delete.exists"));
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("general.cmd.delete.exists"));
 					return true;
 				}
 				RaceQue que = new RaceQue(track, type);
 				trackName = track.getTrackName();
-				if (main.plugin.raceQues.getQue(trackName) != null) {
-					que = main.plugin.raceQues.getQue(trackName);
+				if (MarioKart.plugin.raceQues.getQue(trackName) != null) {
+					que = MarioKart.plugin.raceQues.getQue(trackName);
 				}
 				if (que.getType() != type) {
 					if (que.getHowManyPlayers() < 1) {
@@ -387,17 +387,17 @@ public class URaceCommandExecutor implements CommandExecutor {
 						que = new RaceQue(track, type);
 					} else {
 						// Another queue for different RameType
-						String msg = main.msgs.get("race.que.other");
+						String msg = MarioKart.msgs.get("race.que.other");
 						msg = msg.replaceAll(Pattern.quote("%type%"), que
 								.getType().name().toLowerCase());
-						sender.sendMessage(main.colors.getError() + msg);
+						sender.sendMessage(MarioKart.colors.getError() + msg);
 						return true;
 					}
 				}
-				if (main.plugin.raceMethods.inAGame(player) != null
-						|| main.plugin.raceMethods.inGameQue(player) != null) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("race.que.existing"));
+				if (MarioKart.plugin.raceMethods.inAGame(player) != null
+						|| MarioKart.plugin.raceMethods.inGameQue(player) != null) {
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("race.que.existing"));
 					return true;
 				}
 				if (player.getVehicle() != null) {
@@ -405,7 +405,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 					veh.eject();
 					veh.remove();
 				}
-				main.plugin.gameScheduler.joinGame(player, track, que,
+				MarioKart.plugin.gameScheduler.joinGame(player, track, que,
 						trackName);
 				return true;
 			}
@@ -436,11 +436,11 @@ public class URaceCommandExecutor implements CommandExecutor {
 			if (page < 0) {
 				page = 0;
 			}
-			String msg = main.msgs.get("general.cmd.page");
+			String msg = MarioKart.msgs.get("general.cmd.page");
 			msg = msg.replaceAll(Pattern.quote("%page%"), "" + (page + 1));
 			msg = msg.replaceAll(Pattern.quote("%total%"), ""
 					+ (totalpages + 1));
-			sender.sendMessage(main.colors.getTitle() + msg);
+			sender.sendMessage(MarioKart.colors.getTitle() + msg);
 			for (int i = pos; i < (i + 6) && i < names.size(); i++) {
 				String Trackname = names.get(i);
 				RaceQue que = plugin.raceQues.getQue(Trackname);
@@ -451,7 +451,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 				if (que.getHowManyPlayers() > (que.getPlayerLimit() - 2)) {
 					color = ChatColor.YELLOW;
 				}
-				if (que.getHowManyPlayers() < main.config
+				if (que.getHowManyPlayers() < MarioKart.config
 						.getInt("race.que.minPlayers")) {
 					color = ChatColor.YELLOW;
 				}
@@ -460,17 +460,17 @@ public class URaceCommandExecutor implements CommandExecutor {
 					String s = "" + chars[0];
 					s = s.toUpperCase();
 					Trackname = color + s + Trackname.substring(1)
-							+ main.colors.getInfo() + " (" + color
-							+ que.getHowManyPlayers() + main.colors.getInfo()
+							+ MarioKart.colors.getInfo() + " (" + color
+							+ que.getHowManyPlayers() + MarioKart.colors.getInfo()
 							+ "/" + que.getPlayerLimit() + ")";
 				}
-				sender.sendMessage(main.colors.getInfo() + Trackname);
+				sender.sendMessage(MarioKart.colors.getInfo() + Trackname);
 			}
 			return true;
 		} else if (command.equalsIgnoreCase("leave")) {
 			if (player == null) {
-				sender.sendMessage(main.colors.getError()
-						+ main.msgs.get("general.cmd.playersOnly"));
+				sender.sendMessage(MarioKart.colors.getError()
+						+ MarioKart.msgs.get("general.cmd.playersOnly"));
 				return true;
 			}
 			Boolean game = true;
@@ -481,8 +481,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 			}
 			if (que == null) {
 				if (!game) {
-					sender.sendMessage(main.colors.getError()
-							+ main.msgs.get("general.cmd.leave.fail"));
+					sender.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("general.cmd.leave.fail"));
 					return true;
 				}
 			}
@@ -492,9 +492,9 @@ public class URaceCommandExecutor implements CommandExecutor {
 				RaceQue queue = plugin.raceQues.getQue(que);
 				plugin.gameScheduler.leaveQue(player, queue, queue.getTrack()
 						.getTrackName());
-				String msg = main.msgs.get("general.cmd.leave.success");
+				String msg = MarioKart.msgs.get("general.cmd.leave.success");
 				msg = msg.replaceAll(Pattern.quote("%name%"), que);
-				sender.sendMessage(main.colors.getSuccess() + msg);
+				sender.sendMessage(MarioKart.colors.getSuccess() + msg);
 				player.teleport(queue.getTrack().getExit(plugin.getServer()));
 			}
 			return true;

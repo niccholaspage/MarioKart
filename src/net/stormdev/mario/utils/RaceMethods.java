@@ -6,15 +6,15 @@ import java.util.Set;
 
 import net.stormdev.mario.mariokart.Race;
 import net.stormdev.mario.mariokart.User;
-import net.stormdev.mario.mariokart.main;
+import net.stormdev.mario.mariokart.MarioKart;
 
 import org.bukkit.entity.Player;
 
 public class RaceMethods {
-	private main plugin = null;
+	private MarioKart plugin = null;
 
 	public RaceMethods() {
-		this.plugin = main.plugin;
+		this.plugin = MarioKart.plugin;
 	}
 
 	public Race inAGame(Player player) {

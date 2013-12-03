@@ -2,12 +2,12 @@ package net.stormdev.mario.utils;
 
 import java.util.Set;
 
-import net.stormdev.mario.mariokart.main;
+import net.stormdev.mario.mariokart.MarioKart;
 
 public class Ques {
-	main plugin = null;
+	MarioKart plugin = null;
 
-	public Ques(main plugin) {
+	public Ques(MarioKart plugin) {
 		this.plugin = plugin;
 	}
 

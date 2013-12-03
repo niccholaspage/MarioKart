@@ -70,9 +70,9 @@ import com.useful.ucars.ucars;
 import com.useful.ucarsCommon.StatValue;
 
 public class URaceListener implements Listener {
-	main plugin = null;
+	MarioKart plugin = null;
 
-	public URaceListener(main plugin) {
+	public URaceListener(MarioKart plugin) {
 		this.plugin = plugin;
 	}
 
@@ -111,7 +111,7 @@ public class URaceListener implements Listener {
 		if (plugin.raceMethods.inAGame(player) == null) {
 			return;
 		}
-		if (ItemStackFromId.equals(main.config.getString("mariokart.banana"),
+		if (ItemStackFromId.equals(MarioKart.config.getString("mariokart.banana"),
 				stack.getTypeId(), stack.getDurability())) {
 			player.getWorld().playSound(player.getLocation(), Sound.SPLASH2,
 					1f, 0.5f);
@@ -176,13 +176,13 @@ public class URaceListener implements Listener {
 			return;
 		}
 		Player player = event.getPlayer();
-		if (!main.trackCreators.containsKey(player.getName())) {
+		if (!MarioKart.trackCreators.containsKey(player.getName())) {
 			return;
 		}
-		TrackCreator creator = main.trackCreators.get(player.getName());
+		TrackCreator creator = MarioKart.trackCreators.get(player.getName());
 		Boolean wand = false;
 		int handid = player.getItemInHand().getTypeId();
-		if (handid == main.config.getInt("setup.create.wand")) {
+		if (handid == MarioKart.config.getInt("setup.create.wand")) {
 			wand = true;
 		}
 		creator.set(wand);
@@ -199,7 +199,7 @@ public class URaceListener implements Listener {
 		} catch (Exception e) {
 			return;
 		}
-		main.marioKart.calculate(player, event);
+		MarioKart.marioKart.calculate(player, event);
 		return;
 	}
 
@@ -252,7 +252,7 @@ public class URaceListener implements Listener {
 			Vector vel = new Vector(x, 0, z);
 			shell.setVelocity(vel);
 			if (pz < 1.1 && px < 1.1) {
-				String msg = main.msgs.get("mario.hit");
+				String msg = MarioKart.msgs.get("mario.hit");
 				msg = msg.replaceAll(Pattern.quote("%name%"), "tracking shell");
 				target.getLocation()
 				.getWorld()
@@ -282,7 +282,7 @@ public class URaceListener implements Listener {
 						if (entity instanceof Player) {
 							Player pl = (Player) entity;
 							if (ucars.listener.inACar(pl)) {
-								String msg = main.msgs.get("mario.hit");
+								String msg = MarioKart.msgs.get("mario.hit");
 								msg = msg.replaceAll(Pattern.quote("%name%"),
 										"green shell");
 								pl.getLocation()
@@ -444,7 +444,7 @@ public class URaceListener implements Listener {
 						if (p != null) {
 							String msg = "";
 							if (!timed) {
-								msg = main.msgs.get("race.end.position");
+								msg = MarioKart.msgs.get("race.end.position");
 								if ((i + 1) <= 4
 										&& (i + 1) != game.getUsers().size()) {
 									player.getWorld().playSound(
@@ -470,13 +470,13 @@ public class URaceListener implements Listener {
 								double tim = (game.endTimeMS - game.startTimeMS) / 10;
 								double ti = (int) tim;
 								double t = ti / 100;
-								msg = main.msgs.get("race.end.time");
+								msg = MarioKart.msgs.get("race.end.time");
 								msg = msg.replaceAll(Pattern.quote("%time%"), t
 										+ "");
 								plugin.raceTimes.addRaceTime(game.getTrack()
 										.getTrackName(), player.getName(), t);
 							}
-							p.sendMessage(main.colors.getSuccess() + msg);
+							p.sendMessage(MarioKart.colors.getSuccess() + msg);
 						}
 					}
 				}
@@ -491,7 +491,7 @@ public class URaceListener implements Listener {
 					}
 					String msg = "";
 					if (!timed) {
-						msg = main.msgs.get("race.end.position");
+						msg = MarioKart.msgs.get("race.end.position");
 						if (position <= 4 && position != game.getUsers().size()) {
 							player.getWorld().playSound(player.getLocation(),
 									Sound.NOTE_BASS_GUITAR, 1, 1);
@@ -518,12 +518,12 @@ public class URaceListener implements Listener {
 						double tim = (game.endTimeMS - game.startTimeMS) / 10;
 						double ti = (int) tim;
 						double t = ti / 100;
-						msg = main.msgs.get("race.end.time");
+						msg = MarioKart.msgs.get("race.end.time");
 						msg = msg.replaceAll(Pattern.quote("%time%"), t + "");
 						plugin.raceTimes.addRaceTime(game.getTrack()
 								.getTrackName(), player.getName(), t);
 					}
-					player.sendMessage(main.colors.getSuccess() + msg);
+					player.sendMessage(MarioKart.colors.getSuccess() + msg);
 				}
 			}
 			game.leave(user, false);
@@ -537,7 +537,7 @@ public class URaceListener implements Listener {
 			.runTaskLater(plugin, new Runnable() {
 
 				public void run() {
-					String rl = main.config
+					String rl = MarioKart.config
 							.getString("mariokart.resourceNonMarioPack");
 					Boolean valid = true;
 					try {
@@ -546,8 +546,8 @@ public class URaceListener implements Listener {
 						valid = false;
 					}
 					if (valid) {
-						pl.sendMessage(main.colors.getInfo()
-								+ main.msgs.get("resource.clear"));
+						pl.sendMessage(MarioKart.colors.getInfo()
+								+ MarioKart.msgs.get("resource.clear"));
 						pl.setTexturePack(rl);
 					}
 					return;
@@ -627,7 +627,7 @@ public class URaceListener implements Listener {
 			if (player != null){
 				player.setGameMode(GameMode.SURVIVAL);
 				player.getInventory().clear();
-				player.getInventory().setItem(8, main.marioKart.respawn);
+				player.getInventory().setItem(8, MarioKart.marioKart.respawn);
 				player.updateInventory();
 			}
 		}
@@ -636,10 +636,10 @@ public class URaceListener implements Listener {
 			plugin.gameScheduler.updateGame(game);
 			user.setLapsLeft(game.totalLaps);
 			user.setCheckpoint(0);
-			String msg = main.msgs.get("race.mid.lap");
+			String msg = MarioKart.msgs.get("race.mid.lap");
 			msg = msg.replaceAll(Pattern.quote("%lap%"), "" + 1);
 			msg = msg.replaceAll(Pattern.quote("%total%"), "" + game.totalLaps);
-			user.getPlayer().sendMessage(main.colors.getInfo() + msg);
+			user.getPlayer().sendMessage(MarioKart.colors.getInfo() + msg);
 		}
 		game.setUsers(users);
 		plugin.gameScheduler.reCalculateQues();
@@ -709,7 +709,7 @@ public class URaceListener implements Listener {
 							user.setLapsLeft(left);
 							lapsLeft = left;
 							if (left != 0) {
-								String msg = main.msgs.get("race.mid.lap");
+								String msg = MarioKart.msgs.get("race.mid.lap");
 								int lap = game.totalLaps - lapsLeft + 1;
 								msg = msg.replaceAll(Pattern.quote("%lap%"), ""
 										+ lap);
@@ -720,7 +720,7 @@ public class URaceListener implements Listener {
 											player.getLocation(),
 											Sound.NOTE_STICKS, 2, 1);
 								}
-								player.sendMessage(main.colors.getInfo() + msg);
+								player.sendMessage(MarioKart.colors.getInfo() + msg);
 							}
 						}
 						if (lapsLeft < 1) {
@@ -732,14 +732,14 @@ public class URaceListener implements Listener {
 							if (won) {
 								for (User u : game.getUsers()) {
 									Player p = u.getPlayer();
-									String msg = main.msgs
+									String msg = MarioKart.msgs
 											.get("race.end.soon");
 									msg = msg.replaceAll("%name%",
 											p.getName());
-									p.sendMessage(main.colors.getSuccess()
+									p.sendMessage(MarioKart.colors.getSuccess()
 											+ game.getWinner()
-											+ main.msgs.get("race.end.won"));
-									p.sendMessage(main.colors.getInfo()
+											+ MarioKart.msgs.get("race.end.won"));
+									p.sendMessage(MarioKart.colors.getInfo()
 											+ msg);
 
 								}
@@ -780,7 +780,7 @@ public class URaceListener implements Listener {
 
 	@EventHandler
 	void exploder(EntityExplodeEvent event) {
-		if (!main.config.getBoolean("mariokart.enable")) {
+		if (!MarioKart.config.getBoolean("mariokart.enable")) {
 			return;
 		}
 		if (event.getEntity() == null) {
@@ -820,7 +820,7 @@ public class URaceListener implements Listener {
 
 	@EventHandler
 	void signClicker(PlayerInteractEvent event) {
-		main.marioKart.calculate(event.getPlayer(), event);
+		MarioKart.marioKart.calculate(event.getPlayer(), event);
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
@@ -839,20 +839,20 @@ public class URaceListener implements Listener {
 				page = Integer.parseInt(ChatColor.stripColor(lines[2]));
 			} catch (NumberFormatException e) {
 			}
-			main.cmdExecutor.urace(event.getPlayer(), new String[] { "list",
+			MarioKart.cmdExecutor.urace(event.getPlayer(), new String[] { "list",
 				"" + page }, event.getPlayer());
 		} else if (cmd.equalsIgnoreCase("leave")
 				|| cmd.equalsIgnoreCase("quit") || cmd.equalsIgnoreCase("exit")) {
-			main.cmdExecutor.urace(event.getPlayer(), new String[] { "leave" },
+			MarioKart.cmdExecutor.urace(event.getPlayer(), new String[] { "leave" },
 					event.getPlayer());
 		} else if (cmd.equalsIgnoreCase("join")) {
 			String mode = ChatColor.stripColor(lines[3]);
 			if (mode.length() > 0) {
-				main.cmdExecutor.urace(event.getPlayer(), new String[] {
+				MarioKart.cmdExecutor.urace(event.getPlayer(), new String[] {
 					"join", ChatColor.stripColor(lines[2]).toLowerCase(),
 					mode }, event.getPlayer());
 			} else {
-				main.cmdExecutor.urace(event.getPlayer(), new String[] {
+				MarioKart.cmdExecutor.urace(event.getPlayer(), new String[] {
 					"join", ChatColor.stripColor(lines[2]).toLowerCase() },
 					event.getPlayer());
 			}
@@ -864,24 +864,24 @@ public class URaceListener implements Listener {
 	void signWriter(SignChangeEvent event) {
 		String[] lines = event.getLines();
 		if (ChatColor.stripColor(lines[0]).equalsIgnoreCase("[MarioKart]")) {
-			lines[0] = main.colors.getTitle() + "[MarioKart]";
+			lines[0] = MarioKart.colors.getTitle() + "[MarioKart]";
 			Boolean text = true;
 			String cmd = ChatColor.stripColor(lines[1]);
 			if (cmd.equalsIgnoreCase("list")) {
-				lines[1] = main.colors.getInfo() + "List";
+				lines[1] = MarioKart.colors.getInfo() + "List";
 				if (!(lines[2].length() < 1)) {
 					text = false;
 				}
-				lines[2] = main.colors.getSuccess()
+				lines[2] = MarioKart.colors.getSuccess()
 						+ ChatColor.stripColor(lines[2]);
 			} else if (cmd.equalsIgnoreCase("join")) {
-				lines[1] = main.colors.getInfo() + "Join";
-				lines[2] = main.colors.getSuccess()
+				lines[1] = MarioKart.colors.getInfo() + "Join";
+				lines[2] = MarioKart.colors.getSuccess()
 						+ ChatColor.stripColor(lines[2]);
 				if (lines[2].equalsIgnoreCase("auto")) {
-					lines[2] = main.colors.getTp() + "Auto";
+					lines[2] = MarioKart.colors.getTp() + "Auto";
 				}
-				lines[3] = main.colors.getInfo() + lines[3];
+				lines[3] = MarioKart.colors.getInfo() + lines[3];
 				text = false;
 			} else if (cmd.equalsIgnoreCase("leave")
 					|| cmd.equalsIgnoreCase("exit")
@@ -897,7 +897,7 @@ public class URaceListener implements Listener {
 					body = body.toLowerCase();
 					cmd = start + body;
 				}
-				lines[1] = main.colors.getInfo() + cmd;
+				lines[1] = MarioKart.colors.getInfo() + cmd;
 			} else if (cmd.equalsIgnoreCase("items")) {
 				Location above = event.getBlock().getLocation().add(0, 1.4, 0);
 				EnderCrystal crystal = (EnderCrystal) above.getWorld()
@@ -1041,7 +1041,7 @@ public class URaceListener implements Listener {
 		} catch (Exception e) {
 			return;
 		}
-		if (!main.config.getBoolean("mariokart.enable")) {
+		if (!MarioKart.config.getBoolean("mariokart.enable")) {
 			return;
 		}
 		event.setDamage(0);
@@ -1094,10 +1094,10 @@ public class URaceListener implements Listener {
 		});
 		Minecart cart = (Minecart) loc.getWorld().spawnEntity(loc,
 				EntityType.MINECART);
-		cart.setMetadata("kart.racing", new StatValue(null, main.plugin));
+		cart.setMetadata("kart.racing", new StatValue(null, MarioKart.plugin));
 		cart.setPassenger(player);
 		player.setMetadata("car.stayIn", new StatValue(null, plugin));
-		player.getInventory().setItem(8, main.marioKart.respawn);
+		player.getInventory().setItem(8, MarioKart.marioKart.respawn);
 		player.updateInventory();
 		player.setScoreboard(race.board);
 		return;

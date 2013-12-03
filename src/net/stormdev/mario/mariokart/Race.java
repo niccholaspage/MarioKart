@@ -66,9 +66,9 @@ public class Race {
 		this.trackName = trackName;
 		this.totalLaps = this.track.getLaps();
 		this.maxCheckpoints = this.track.getCheckpoints().size() - 1;
-		this.tickrate = main.config.getLong("general.raceTickrate");
+		this.tickrate = MarioKart.config.getLong("general.raceTickrate");
 		this.scorerate = (long) ((this.tickrate * 2) + (this.tickrate / 0.5));
-		this.board = main.plugin.getServer().getScoreboardManager()
+		this.board = MarioKart.plugin.getServer().getScoreboardManager()
 				.getNewScoreboard();
 		this.scores = board.registerNewObjective("", "dummy");
 		scores.setDisplaySlot(DisplaySlot.BELOW_NAME);
@@ -80,7 +80,7 @@ public class Race {
 					+ "Race Time(s)", "dummy");
 		}
 		scoresBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
-		main.plugin.gameScheduler.runningGames++;
+		MarioKart.plugin.gameScheduler.runningGames++;
 	}
 
 	public RaceType getType() {
@@ -158,15 +158,15 @@ public class Race {
 			if (users.size() < 2) {
 
 				for (User u : getUsersIn()) {
-					String msg = main.msgs.get("race.end.soon");
+					String msg = MarioKart.msgs.get("race.end.soon");
 
-					u.getPlayer().sendMessage(main.colors.getInfo() + msg);
+					u.getPlayer().sendMessage(MarioKart.colors.getInfo() + msg);
 				}
 				startEndCount();
 			}
 		}
 		playerOut(user);
-		player.removeMetadata("car.stayIn", main.plugin);
+		player.removeMetadata("car.stayIn", MarioKart.plugin);
 		if (quit) {
 			scoresBoard.getScore(player).setScore(0);
 			this.board.resetScores(player);
@@ -176,16 +176,16 @@ public class Race {
 				veh.eject();
 				veh.remove();
 			}
-			player.removeMetadata("car.stayIn", main.plugin);
+			player.removeMetadata("car.stayIn", MarioKart.plugin);
 			player.getInventory().setContents(user.getOldInventory());
 			player.setGameMode(GameMode.SURVIVAL);
 			try {
-				player.teleport(this.track.getExit(main.plugin.getServer()));
+				player.teleport(this.track.getExit(MarioKart.plugin.getServer()));
 			} catch (Exception e) {
 				player.teleport(player.getWorld().getSpawnLocation());
 			}
 			player.sendMessage(ChatColor.GOLD + "Successfully quit the race!");
-			player.setScoreboard(main.plugin.getServer().getScoreboardManager()
+			player.setScoreboard(MarioKart.plugin.getServer().getScoreboardManager()
 					.getMainScoreboard());
 			for (User us : getUsers()) {
 				us.getPlayer().sendMessage(ChatColor.GOLD + player.getName() + " quit the race!");
@@ -207,7 +207,7 @@ public class Race {
 				end();
 			} catch (Exception e) {
 			}
-			main.plugin.gameScheduler.reCalculateQues();
+			MarioKart.plugin.gameScheduler.reCalculateQues();
 		}
 	}
 
@@ -237,8 +237,8 @@ public class Race {
 	public void startEndCount() {
 		final int count = this.finishCountdown;
 
-		main.plugin.getServer().getScheduler()
-		.runTaskAsynchronously(main.plugin, new Runnable() {
+		MarioKart.plugin.getServer().getScheduler()
+		.runTaskAsynchronously(MarioKart.plugin, new Runnable() {
 
 			public void run() {
 				int z = count;
@@ -252,10 +252,10 @@ public class Race {
 				if (!ended) {
 					try {
 						try {
-							main.plugin
+							MarioKart.plugin
 							.getServer()
 							.getScheduler()
-							.runTask(main.plugin,
+							.runTask(MarioKart.plugin,
 									new Runnable() {
 
 								public void run() {
@@ -307,18 +307,18 @@ public class Race {
 				this.leave(user, true);
 			}
 		}
-		this.task = main.plugin.getServer().getScheduler()
-				.runTaskTimer(main.plugin, new Runnable() {
+		this.task = MarioKart.plugin.getServer().getScheduler()
+				.runTaskTimer(MarioKart.plugin, new Runnable() {
 
 					public void run() {
 						RaceUpdateEvent event = new RaceUpdateEvent(game);
-						main.plugin.getServer().getPluginManager()
+						MarioKart.plugin.getServer().getPluginManager()
 						.callEvent(event);
 						return;
 					}
 				}, tickrate, tickrate);
-		this.scoreCalcs = main.plugin.getServer().getScheduler()
-				.runTaskTimer(main.plugin, new Runnable() {
+		this.scoreCalcs = MarioKart.plugin.getServer().getScheduler()
+				.runTaskTimer(MarioKart.plugin, new Runnable() {
 
 					public void run() {
 						if (!(type == RaceType.TIME_TRIAL)) {
@@ -360,10 +360,10 @@ public class Race {
 			if (type == RaceType.TIME_TRIAL) {
 				this.startTimeMS = System.currentTimeMillis();
 			}
-			main.plugin.getServer().getPluginManager()
+			MarioKart.plugin.getServer().getPluginManager()
 			.callEvent(new RaceStartEvent(this));
 		} catch (Exception e) {
-			main.logger.log("Error starting race!", Level.SEVERE);
+			MarioKart.logger.log("Error starting race!", Level.SEVERE);
 			end();
 		}
 		return;
@@ -431,12 +431,12 @@ public class Race {
 		} catch (IllegalStateException e) {
 		}
 		try {
-			int current = main.plugin.gameScheduler.runningGames;
+			int current = MarioKart.plugin.gameScheduler.runningGames;
 			current--;
 			if (current < 0) {
 				current = 0;
 			}
-			main.plugin.gameScheduler.runningGames = current;
+			MarioKart.plugin.gameScheduler.runningGames = current;
 		} catch (Exception e) {
 			// Server reloaded when game ending
 		}
@@ -446,23 +446,23 @@ public class Race {
 			Player player = user.getPlayer();
 
 			if (player != null){
-				player.setScoreboard(main.plugin.getServer().getScoreboardManager().getMainScoreboard());
+				player.setScoreboard(MarioKart.plugin.getServer().getScoreboardManager().getMainScoreboard());
 
 				player.setLevel(user.getOldLevel());
 
 				player.setExp(user.getOldExp());
 
-				main.plugin.getServer().getPluginManager().callEvent(new RaceFinishEvent(this, user));
+				MarioKart.plugin.getServer().getPluginManager().callEvent(new RaceFinishEvent(this, user));
 			}
 		}
 
 		RaceEndEvent evt = new RaceEndEvent(this);
 
 		if (evt != null) {
-			main.plugin.getServer().getPluginManager().callEvent(evt);
+			MarioKart.plugin.getServer().getPluginManager().callEvent(evt);
 		}
 
-		main.plugin.gameScheduler.reCalculateQues();
+		MarioKart.plugin.gameScheduler.reCalculateQues();
 	}
 
 	public void finish(User user) {
@@ -482,7 +482,7 @@ public class Race {
 			
 			this.endTimeMS = System.currentTimeMillis();
 			
-			main.plugin.getServer().getPluginManager().callEvent(new RaceFinishEvent(this, user));
+			MarioKart.plugin.getServer().getPluginManager().callEvent(new RaceFinishEvent(this, user));
 		}
 	}
 
@@ -500,9 +500,9 @@ public class Race {
 				double dist = check.distanceSquared(pl); // Squared because of
 				// better
 				// performance
-				p.removeMetadata("checkpoint.distance", main.plugin);
+				p.removeMetadata("checkpoint.distance", MarioKart.plugin);
 				p.setMetadata("checkpoint.distance", new StatValue(dist,
-						main.plugin));
+						MarioKart.plugin));
 				if (dist < 100) {
 					at = true;
 					checkpoint = key;

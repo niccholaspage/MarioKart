@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import net.stormdev.mario.mariokart.Race;
-import net.stormdev.mario.mariokart.main;
+import net.stormdev.mario.mariokart.MarioKart;
 import net.stormdev.mario.utils.ItemStackFromId;
 import net.stormdev.mario.utils.shellUpdateEvent;
 
@@ -42,15 +42,15 @@ import com.useful.ucars.ucarUpdateEvent;
 import com.useful.ucars.ucars;
 import com.useful.ucarsCommon.StatValue;
 
-public class MarioKart {
-	main plugin = null;
+public class MarioKartStuff {
+	MarioKart plugin = null;
 	private HashMap<UUID, BukkitTask> tasks = new HashMap<UUID, BukkitTask>();
 	Boolean enabled = true;
 	public ItemStack respawn = null;
 
-	public MarioKart(main plugin) {
+	public MarioKartStuff(MarioKart plugin) {
 		this.plugin = plugin;
-		enabled = main.config.getBoolean("mariokart.enable");
+		enabled = MarioKart.config.getBoolean("mariokart.enable");
 		this.respawn = new ItemStack(Material.EGG);
 		ItemMeta meta = this.respawn.getItemMeta();
 		meta.setDisplayName(ChatColor.GREEN + "Respawn");
@@ -80,7 +80,7 @@ public class MarioKart {
 				ItemStack inHand = evt.getPlayer().getItemInHand();
 				// If green shell, throw forward
 				if (ItemStackFromId.equals(
-						main.config.getString("mariokart.greenShell"),
+						MarioKart.config.getString("mariokart.greenShell"),
 						inHand.getTypeId(), inHand.getDurability())) {
 					Race race = plugin.raceMethods.inAGame(player);
 					if (race == null) {
@@ -98,7 +98,7 @@ public class MarioKart {
 					// Location loc =
 					// player.getLocation().getBlock().getRelative(ClosestFace.getClosestFace(car.getLocation().getYaw()),
 					// 4).getLocation();
-					ItemStack toDrop = ItemStackFromId.get(main.config
+					ItemStack toDrop = ItemStackFromId.get(MarioKart.config
 							.getString("mariokart.greenShell"));
 					final Item shell = player.getLocation().getWorld()
 							.dropItem(loc, toDrop);
@@ -144,17 +144,17 @@ public class MarioKart {
 									}
 									if (cooldown >= 0) {
 										shell.removeMetadata("shell.cooldown",
-												main.plugin);
+												MarioKart.plugin);
 										shell.setMetadata("shell.cooldown",
 												new StatValue(cooldown,
-														main.plugin));
+														MarioKart.plugin));
 									}
 									shell.setTicksLived(1);
 									// shell.setPickupDelay(Integer.MAX_VALUE);
 									shell.removeMetadata("shell.expiry",
-											main.plugin);
+											MarioKart.plugin);
 									shell.setMetadata("shell.expiry",
-											new StatValue(expiry, main.plugin));
+											new StatValue(expiry, MarioKart.plugin));
 									Vector direction = player.getEyeLocation()
 											.getDirection();
 									double speed = 1.2;
@@ -181,7 +181,7 @@ public class MarioKart {
 									Vector vel = new Vector(x, 0, z);
 									shellUpdateEvent event = new shellUpdateEvent(
 											shell, null, vel, cool);
-									main.plugin.getServer().getPluginManager()
+									MarioKart.plugin.getServer().getPluginManager()
 											.callEvent(event);
 									return;
 								}
@@ -203,7 +203,7 @@ public class MarioKart {
 				}
 				return;
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.random"),
+					MarioKart.config.getString("mariokart.random"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				inHand.setAmount(inHand.getAmount() - 1);
 				ItemStack give = this.getRandomPowerup();
@@ -211,7 +211,7 @@ public class MarioKart {
 					Race race = plugin.raceMethods.inAGame(ply);
 					if (ply.getName().equals(race.winning)) {
 						while (ItemStackFromId.equals(
-								main.config.getString("mariokart.blueShell"),
+								MarioKart.config.getString("mariokart.blueShell"),
 								give.getTypeId(), give.getDurability())) {
 							give = this.getRandomPowerup();
 						}
@@ -219,22 +219,22 @@ public class MarioKart {
 				}
 				evt.getPlayer().getInventory().addItem(give);
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.star"),
+					MarioKart.config.getString("mariokart.star"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				inHand.setAmount(inHand.getAmount() - 1);
 				car.setMetadata("kart.immune",
-						new StatValue(15000, main.plugin)); // Value =
+						new StatValue(15000, MarioKart.plugin)); // Value =
 															// length(millis)
 				final String pname = ply.getName();
 				plugin.getServer().getScheduler()
 						.runTaskLater(plugin, new Runnable() {
 
 							public void run() {
-								Player pl = main.plugin.getServer().getPlayer(
+								Player pl = MarioKart.plugin.getServer().getPlayer(
 										pname);
 								if (pl != null) {
 									car.removeMetadata("kart.immune",
-											main.plugin);
+											MarioKart.plugin);
 								}
 							}
 						}, 300l);
@@ -265,7 +265,7 @@ public class MarioKart {
 																			// speed
 																			// boost
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.mushroom"),
+					MarioKart.config.getString("mariokart.mushroom"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				inHand.setAmount(inHand.getAmount() - 1);
 				ucars.listener.carBoost(ply.getName(), 19, 9000,
@@ -273,7 +273,7 @@ public class MarioKart {
 																			// speed
 																			// boost
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.redShell"),
+					MarioKart.config.getString("mariokart.redShell"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				Race race = plugin.raceMethods.inAGame(player);
 				if (race == null) {
@@ -297,7 +297,7 @@ public class MarioKart {
 				}
 				final String targetName = (String) pls[tpos];
 				inHand.setAmount(inHand.getAmount() - 1);
-				ItemStack toDrop = ItemStackFromId.get(main.config
+				ItemStack toDrop = ItemStackFromId.get(MarioKart.config
 						.getString("mariokart.redShell"));
 				final Item shell = player.getLocation().getWorld()
 						.dropItem(player.getLocation(), toDrop);
@@ -333,19 +333,19 @@ public class MarioKart {
 								shell.setTicksLived(1);
 								shell.setPickupDelay(Integer.MAX_VALUE);
 								shell.removeMetadata("shell.expiry",
-										main.plugin);
+										MarioKart.plugin);
 								shell.setMetadata("shell.expiry",
-										new StatValue(expiry, main.plugin));
+										new StatValue(expiry, MarioKart.plugin));
 								shellUpdateEvent event = new shellUpdateEvent(
 										shell, targetName, null, false);
-								main.plugin.getServer().getPluginManager()
+								MarioKart.plugin.getServer().getPluginManager()
 										.callEvent(event);
 								return;
 							}
 						}, 3l, 3l);
 				tasks.put(shell.getUniqueId(), task);
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.blueShell"),
+					MarioKart.config.getString("mariokart.blueShell"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				Race race = plugin.raceMethods.inAGame(player);
 				if (race == null) {
@@ -356,7 +356,7 @@ public class MarioKart {
 				Object[] pls = (Object[]) keys.toArray();
 				final String targetName = (String) pls[0];
 				inHand.setAmount(inHand.getAmount() - 1);
-				ItemStack toDrop = ItemStackFromId.get(main.config
+				ItemStack toDrop = ItemStackFromId.get(MarioKart.config
 						.getString("mariokart.blueShell"));
 				final Item shell = player.getLocation().getWorld()
 						.dropItem(player.getLocation(), toDrop);
@@ -392,26 +392,26 @@ public class MarioKart {
 								shell.setTicksLived(1);
 								shell.setPickupDelay(Integer.MAX_VALUE);
 								shell.removeMetadata("shell.expiry",
-										main.plugin);
+										MarioKart.plugin);
 								shell.setMetadata("shell.expiry",
-										new StatValue(expiry, main.plugin));
+										new StatValue(expiry, MarioKart.plugin));
 								shellUpdateEvent event = new shellUpdateEvent(
 										shell, targetName, null, false);
-								main.plugin.getServer().getPluginManager()
+								MarioKart.plugin.getServer().getPluginManager()
 										.callEvent(event);
 								return;
 							}
 						}, 3l, 3l);
 				tasks.put(shell.getUniqueId(), task);
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.greenShell"),
+					MarioKart.config.getString("mariokart.greenShell"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				Race race = plugin.raceMethods.inAGame(player);
 				if (race == null) {
 					return;
 				}
 				inHand.setAmount(inHand.getAmount() - 1);
-				ItemStack toDrop = ItemStackFromId.get(main.config
+				ItemStack toDrop = ItemStackFromId.get(MarioKart.config
 						.getString("mariokart.greenShell"));
 				Location loc = player.getLocation().add(
 						player.getLocation().getDirection().multiply(-4));
@@ -462,9 +462,9 @@ public class MarioKart {
 								shell.setTicksLived(1);
 								shell.setPickupDelay(Integer.MAX_VALUE);
 								shell.removeMetadata("shell.expiry",
-										main.plugin);
+										MarioKart.plugin);
 								shell.setMetadata("shell.expiry",
-										new StatValue(expiry, main.plugin));
+										new StatValue(expiry, MarioKart.plugin));
 								Vector direction = player.getEyeLocation()
 										.getDirection();
 								double speed = 1.2;
@@ -491,14 +491,14 @@ public class MarioKart {
 								Vector vel = new Vector(-x, 0, -z);
 								shellUpdateEvent event = new shellUpdateEvent(
 										shell, null, vel, cool);
-								main.plugin.getServer().getPluginManager()
+								MarioKart.plugin.getServer().getPluginManager()
 										.callEvent(event);
 								return;
 							}
 						}, 3l, 3l);
 				tasks.put(shell.getUniqueId(), task);
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.bomb"),
+					MarioKart.config.getString("mariokart.bomb"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				inHand.setAmount(inHand.getAmount() - 1);
 				final Vector vel = ply.getEyeLocation().getDirection();
@@ -527,7 +527,7 @@ public class MarioKart {
 							}
 						});
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.lightning"),
+					MarioKart.config.getString("mariokart.lightning"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				Race race = plugin.raceMethods.inAGame(player);
 				if (race == null) {
@@ -556,7 +556,7 @@ public class MarioKart {
 						pl.getWorld().strikeLightningEffect(pl.getLocation());
 						if (pl.getVehicle() != null) {
 							if (pl.getVehicle() instanceof Minecart) {
-								main.listener.penalty(
+								MarioKart.listener.penalty(
 										(Minecart) pl.getVehicle(), 4);
 								ucars.listener
 										.carBoost(
@@ -571,7 +571,7 @@ public class MarioKart {
 				}
 				inHand.setAmount(inHand.getAmount() - 1);
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.pow"), inHand.getTypeId(),
+					MarioKart.config.getString("mariokart.pow"), inHand.getTypeId(),
 					inHand.getDurability())) {
 				Race race = plugin.raceMethods.inAGame(player);
 				if (race == null) {
@@ -595,9 +595,9 @@ public class MarioKart {
 									for (int i = 0; i < pls.length && i <= ppos; i++) {
 										Player pl = plugin.getServer()
 												.getPlayer((String) pls[i]);
-										pl.sendMessage(main.colors.getTitle()
+										pl.sendMessage(MarioKart.colors.getTitle()
 												+ "[MarioKart:] "
-												+ main.colors.getInfo() + count);
+												+ MarioKart.colors.getInfo() + count);
 									}
 									try {
 										Thread.sleep(1000);
@@ -623,7 +623,7 @@ public class MarioKart {
 																	&& !pl.getVehicle()
 																			.hasMetadata(
 																					"kart.immune")) {
-																String msg = main.msgs
+																String msg = MarioKart.msgs
 																		.get("mario.hit");
 																msg = msg
 																		.replaceAll(
@@ -637,7 +637,7 @@ public class MarioKart {
 																				0.25f);
 																pl.sendMessage(ChatColor.RED
 																		+ msg);
-																main.listener
+																MarioKart.listener
 																		.penalty(
 																				(Minecart) pl
 																						.getVehicle(),
@@ -652,7 +652,7 @@ public class MarioKart {
 						});
 				inHand.setAmount(inHand.getAmount() - 1);
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.banana"),
+					MarioKart.config.getString("mariokart.banana"),
 					inHand.getTypeId(), inHand.getDurability())) {
 				BlockFace face = ClosestFace.getClosestFace(player
 						.getLocation().getYaw());
@@ -660,11 +660,11 @@ public class MarioKart {
 						.getRelative(face, -1).getLocation();
 				loc.getWorld().dropItemNaturally(
 						loc,
-						ItemStackFromId.get(main.config
+						ItemStackFromId.get(MarioKart.config
 								.getString("mariokart.banana")));
 				inHand.setAmount(inHand.getAmount() - 1);
 			} else if (ItemStackFromId.equals(
-					main.config.getString("mariokart.boo"), inHand.getTypeId(),
+					MarioKart.config.getString("mariokart.boo"), inHand.getTypeId(),
 					inHand.getDurability())) {
 				PotionEffect effect = new PotionEffect(
 						PotionEffectType.INVISIBILITY, 120, 10);
@@ -683,7 +683,7 @@ public class MarioKart {
 				}
 				int pos = pppos - 1;
 				if (!(pos < 0)) {
-					final Player pl = main.plugin.getServer().getPlayer(
+					final Player pl = MarioKart.plugin.getServer().getPlayer(
 							(String) pls[pos]);
 					pl.setMetadata("kart.rolling", new StatValue(true, plugin));
 					pl.getInventory().clear();
@@ -696,9 +696,9 @@ public class MarioKart {
 					pl.getWorld().playSound(pl.getLocation(),
 							Sound.AMBIENCE_CAVE, 1, 1);
 					pl.updateInventory();
-					String msg = main.msgs.get("mario.hit");
+					String msg = MarioKart.msgs.get("mario.hit");
 					msg = msg.replaceAll("%name%", "ghost");
-					pl.sendMessage(main.colors.getInfo() + msg);
+					pl.sendMessage(MarioKart.colors.getInfo() + msg);
 					plugin.getServer().getScheduler()
 							.runTaskLater(plugin, new Runnable() {
 
@@ -827,7 +827,7 @@ public class MarioKart {
 							if (plugin.raceMethods.inAGame(ply) != null) {
 								Race race = plugin.raceMethods.inAGame(ply);
 								if (ply.getName().equals(race.winning)) {
-									while (ItemStackFromId.equals(main.config
+									while (ItemStackFromId.equals(MarioKart.config
 											.getString("mariokart.blueShell"),
 											give.getTypeId(), give
 													.getDurability())) {
@@ -842,7 +842,7 @@ public class MarioKart {
 							if (plugin.raceMethods.inAGame(ply) != null) {
 								Race race = plugin.raceMethods.inAGame(ply);
 								if (ply.getName().equals(race.winning)) {
-									while (ItemStackFromId.equals(main.config
+									while (ItemStackFromId.equals(MarioKart.config
 											.getString("mariokart.blueShell"),
 											give.getTypeId(), give
 													.getDurability())) {
@@ -898,7 +898,7 @@ public class MarioKart {
 							if (ent instanceof EnderCrystal) {
 								final Location loc = ent.getLocation();
 								r.reloadingItemBoxes.add(signLoc);
-								main.plugin.gameScheduler.updateGame(r);
+								MarioKart.plugin.gameScheduler.updateGame(r);
 								// final Sign si = sign;
 								plugin.getServer().getScheduler()
 										.runTaskLater(plugin, new Runnable() {
@@ -906,9 +906,9 @@ public class MarioKart {
 											public void run() {
 												r.reloadingItemBoxes
 														.remove(signLoc);
-												main.plugin.gameScheduler
+												MarioKart.plugin.gameScheduler
 														.updateGame(r);
-												main.listener
+												MarioKart.listener
 														.spawnItemPickupBox(loc);
 												return;
 											}

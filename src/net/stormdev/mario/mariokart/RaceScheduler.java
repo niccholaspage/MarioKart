@@ -33,15 +33,15 @@ import com.useful.ucarsCommon.StatValue;
 public class RaceScheduler {
 	// NOTE: This code is probably highly extraneous in places.
 	private HashMap<String, Race> games = new HashMap<String, Race>();
-	private main plugin;
+	private MarioKart plugin;
 	Random random = null;
 	public int runningGames = 0;
 	public int maxGames = 10;
 
 	public RaceScheduler() {
-		this.plugin = main.plugin;
+		this.plugin = MarioKart.plugin;
 		random = new Random();
-		this.maxGames = main.config.getInt("general.raceLimit");
+		this.maxGames = MarioKart.config.getInt("general.raceLimit");
 	}
 
 	public Boolean joinGame(Player player, RaceTrack track, RaceQue que,
@@ -55,8 +55,8 @@ public class RaceScheduler {
 				// que.addPlayer(playername);
 				List<Player> arenaque = que.getPlayers();
 				if (arenaque.contains(player)) {
-					player.sendMessage(main.colors.getError()
-							+ main.msgs.get("race.que.existing"));
+					player.sendMessage(MarioKart.colors.getError()
+							+ MarioKart.msgs.get("race.que.existing"));
 					return true;
 				}
 
@@ -70,26 +70,26 @@ public class RaceScheduler {
 
 						for (Player pp : arenaque) {
 							if (pp != null && pp.isOnline()) {
-								pp.sendMessage(main.colors.getTitle()
+								pp.sendMessage(MarioKart.colors.getTitle()
 										+ "[MarioKart:] "
-										+ main.colors.getInfo() + p.getName()
-										+ main.msgs.get("race.que.left"));
+										+ MarioKart.colors.getInfo() + p.getName()
+										+ MarioKart.msgs.get("race.que.left"));
 							}
 						}
 					} else {
-						p.sendMessage(main.colors.getTitle() + "[MarioKart:] "
-								+ main.colors.getInfo() + player.getName()
-								+ main.msgs.get("race.que.joined"));
+						p.sendMessage(MarioKart.colors.getTitle() + "[MarioKart:] "
+								+ MarioKart.colors.getInfo() + player.getName()
+								+ MarioKart.msgs.get("race.que.joined"));
 					}
 				}
 				plugin.raceQues.setQue(trackName, que);
 				this.reCalculateQues();
-				player.sendMessage(main.colors.getSuccess()
-						+ main.msgs.get("race.que.success"));
+				player.sendMessage(MarioKart.colors.getSuccess()
+						+ MarioKart.msgs.get("race.que.success"));
 
 				player.teleport(track.getLobby(plugin.getServer()));
 
-				String rl = main.config.getString("mariokart.resourcePack");
+				String rl = MarioKart.config.getString("mariokart.resourcePack");
 
 				Boolean valid = true;
 				try {
@@ -97,25 +97,25 @@ public class RaceScheduler {
 				} catch (MalformedURLException e2) {
 					valid = false;
 				}
-				if (valid && main.config.getBoolean("bitlyUrlShortner")) {
+				if (valid && MarioKart.config.getBoolean("bitlyUrlShortner")) {
 					// Shorten url
-					player.sendMessage(main.colors.getInfo()
-							+ main.msgs.get("resource.download"));
+					player.sendMessage(MarioKart.colors.getInfo()
+							+ MarioKart.msgs.get("resource.download"));
 					// Generic access token:
 					// 3676e306c866a24e3586a109b9ddf36f3d177556
 					Url url = Bitly.as("storm345",
 							"R_b0fae26d68750227470cd06b23be70b7").call(
 									Bitly.shorten(rl));
-					player.sendMessage(main.colors.getInfo()
-							+ main.msgs.get("resource.downloadHelp")
+					player.sendMessage(MarioKart.colors.getInfo()
+							+ MarioKart.msgs.get("resource.downloadHelp")
 							+ ChatColor.RESET + " " + url.getShortUrl());
 					player.setTexturePack(rl);
 				} else {
 					// Dont shorten url
-					player.sendMessage(main.colors.getInfo()
-							+ main.msgs.get("resource.download"));
-					player.sendMessage(main.colors.getInfo()
-							+ main.msgs.get("resource.downloadHelp")
+					player.sendMessage(MarioKart.colors.getInfo()
+							+ MarioKart.msgs.get("resource.download"));
+					player.sendMessage(MarioKart.colors.getInfo()
+							+ MarioKart.msgs.get("resource.downloadHelp")
 							+ ChatColor.RESET + " " + rl);
 					player.setTexturePack(rl);
 				}
@@ -124,8 +124,8 @@ public class RaceScheduler {
 			}
 		}
 		if (player.isOnline()) {
-			player.sendMessage(main.colors.getError()
-					+ main.msgs.get("race.que.full"));
+			player.sendMessage(MarioKart.colors.getError()
+					+ MarioKart.msgs.get("race.que.full"));
 		}
 		return false;
 	}
@@ -150,7 +150,7 @@ public class RaceScheduler {
 				timed_valid = true;
 			}
 			if (!trackInUse(aname)
-					&& que.getHowManyPlayers() >= main.config
+					&& que.getHowManyPlayers() >= MarioKart.config
 					.getInt("race.que.minPlayers")
 					&& !que.getTransitioning()
 					&& !(this.runningGames >= this.maxGames) || timed_valid
@@ -160,18 +160,18 @@ public class RaceScheduler {
 				que.setTransitioning(true);
 				plugin.raceQues.setQue(aname, que);
 				final String queName = aname;
-				double seconds = main.config
+				double seconds = MarioKart.config
 						.getDouble("general.raceGracePeriod");
 				double time = seconds * 20;
 				long grace = (long) time;
 				if (!timed) {
 					for (Player player : que.getPlayers()) {
-						String msg = main.msgs.get("race.que.players");
+						String msg = MarioKart.msgs.get("race.que.players");
 
 						msg = msg.replaceAll(Pattern.quote("%time%"), ""
 								+ seconds);
 
-						player.sendMessage(main.colors.getInfo() + msg);
+						player.sendMessage(MarioKart.colors.getInfo() + msg);
 					}
 				}
 				if (!timed) {
@@ -180,9 +180,9 @@ public class RaceScheduler {
 
 						public void run() {
 							String aname = queName;
-							RaceQue arena = main.plugin.raceQues
+							RaceQue arena = MarioKart.plugin.raceQues
 									.getQue(aname);
-							if (arena.getHowManyPlayers() < main.config
+							if (arena.getHowManyPlayers() < MarioKart.config
 									.getInt("race.que.minPlayers")) {
 								arena.setTransitioning(false);
 								plugin.raceQues.setQue(aname, arena);
@@ -212,7 +212,7 @@ public class RaceScheduler {
 
 						public void run() {
 							String aname = queName;
-							RaceQue arena = main.plugin.raceQues
+							RaceQue arena = MarioKart.plugin.raceQues
 									.getQue(aname);
 							if (arena.getHowManyPlayers() < 1) {
 								arena.setTransitioning(false);
@@ -297,9 +297,9 @@ public class RaceScheduler {
 
 					Minecart car = (Minecart) loc.getWorld().spawnEntity(loc.add(0, 0.2, 0), EntityType.MINECART);
 
-					car.setMetadata("car.frozen", new StatValue(null,main.plugin));
+					car.setMetadata("car.frozen", new StatValue(null,MarioKart.plugin));
 
-					car.setMetadata("kart.racing", new StatValue(null, main.plugin));
+					car.setMetadata("kart.racing", new StatValue(null, MarioKart.plugin));
 
 					car.setPassenger(p);
 
@@ -315,7 +315,7 @@ public class RaceScheduler {
 			Player p = user.getPlayer();
 
 			if (p != null){
-				p.sendMessage(main.colors.getError() + main.msgs.get("race.que.full"));
+				p.sendMessage(MarioKart.colors.getError() + MarioKart.msgs.get("race.que.full"));
 			}
 
 			race.leave(user, true);
@@ -327,7 +327,7 @@ public class RaceScheduler {
 			if (player != null){
 				user.setLocation(player.getLocation().clone());
 
-				player.sendMessage(main.colors.getInfo() + main.msgs.get("race.que.preparing"));
+				player.sendMessage(MarioKart.colors.getInfo() + MarioKart.msgs.get("race.que.preparing"));
 			}
 		}
 		final List<User> users2 = race.getUsers();
@@ -341,7 +341,7 @@ public class RaceScheduler {
 					Player player = user.getPlayer();
 
 					if (player != null){
-						user.getPlayer().sendMessage(main.colors.getInfo() + main.msgs.get("race.que.starting"));
+						user.getPlayer().sendMessage(MarioKart.colors.getInfo() + MarioKart.msgs.get("race.que.starting"));
 					}
 				}
 				for (int i = 10; i > 0; i--) {
@@ -375,7 +375,7 @@ public class RaceScheduler {
 						Player p = user.getPlayer();
 
 						if (p != null){
-							p.sendMessage(main.colors.getInfo() + "" + i);
+							p.sendMessage(MarioKart.colors.getInfo() + "" + i);
 						}
 					}
 					try {
@@ -385,14 +385,14 @@ public class RaceScheduler {
 				}
 				
 				for (Minecart car : cars) {
-					car.removeMetadata("car.frozen", main.plugin);
+					car.removeMetadata("car.frozen", MarioKart.plugin);
 				}
 				
 				for (User user : users2) {
 					Player player = user.getPlayer();
 
 					if (player != null){
-						player.sendMessage(main.colors.getInfo() + main.msgs.get("race.que.go"));
+						player.sendMessage(MarioKart.colors.getInfo() + MarioKart.msgs.get("race.que.go"));
 					}
 				}
 				race.start();
@@ -424,9 +424,9 @@ public class RaceScheduler {
 
 		for (Player p : getQue(arena)) {
 			if (p != null && p.isOnline()) {
-				p.sendMessage(main.colors.getTitle() + "[MarioKart:] "
-						+ main.colors.getInfo() + player.getName()
-						+ main.msgs.get("race.que.left"));
+				p.sendMessage(MarioKart.colors.getTitle() + "[MarioKart:] "
+						+ MarioKart.colors.getInfo() + player.getName()
+						+ MarioKart.msgs.get("race.que.left"));
 			}
 		}
 		reCalculateQues();

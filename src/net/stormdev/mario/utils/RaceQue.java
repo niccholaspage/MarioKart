@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import net.stormdev.mario.mariokart.main;
+import net.stormdev.mario.mariokart.MarioKart;
 
 public class RaceQue {
 	RaceTrack track = null;
@@ -54,7 +54,7 @@ public class RaceQue {
 		this.players.remove(player);
 
 		if (this.type == RaceType.TIME_TRIAL) {
-			main.plugin.raceQues.removeQue(this.track.getTrackName());
+			MarioKart.plugin.raceQues.removeQue(this.track.getTrackName());
 		}
 
 		return;
@@ -66,7 +66,7 @@ public class RaceQue {
 				this.players.remove(player);
 
 				if (this.type == RaceType.TIME_TRIAL) {
-					main.plugin.raceQues.removeQue(this.track.getTrackName());
+					MarioKart.plugin.raceQues.removeQue(this.track.getTrackName());
 				}
 			}
 		}
