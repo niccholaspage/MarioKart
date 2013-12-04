@@ -2,6 +2,7 @@ package net.stormdev.mariokartAddons;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.UUID;
@@ -47,6 +48,7 @@ public class MarioKartStuff {
 	private HashMap<UUID, BukkitTask> tasks = new HashMap<UUID, BukkitTask>();
 	Boolean enabled = true;
 	public ItemStack respawn = null;
+	private Random random = null;
 
 	public MarioKartStuff(MarioKart plugin) {
 		this.plugin = plugin;
@@ -55,6 +57,7 @@ public class MarioKartStuff {
 		ItemMeta meta = this.respawn.getItemMeta();
 		meta.setDisplayName(ChatColor.GREEN + "Respawn");
 		this.respawn.setItemMeta(meta);
+		random = new Random();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -817,7 +820,7 @@ public class MarioKartStuff {
 							// Give all items
 							ItemStack a = this.getRandomPowerup();
 							ItemStack b = this.getRandomBoost();
-							int randomNumber = plugin.random.nextInt(3);
+							int randomNumber = random.nextInt(3);
 							if (randomNumber < 1) {
 								give = b;
 							} else {
@@ -863,7 +866,7 @@ public class MarioKartStuff {
 										int max = 20;
 										int delay = 100;
 										World world = ply.getWorld();
-										int z = plugin.random
+										int z = random
 												.nextInt(max - min) + min;
 										for (int i = 0; i <= z; i++) {
 											ply.getInventory().clear();
@@ -930,7 +933,7 @@ public class MarioKartStuff {
 		int min = 0;
 		Integer[] amts = new Integer[] { 1, 1, 3, 2, 2, 2, 2 };
 		int max = amts.length;
-		int randomNumber = plugin.random.nextInt(max - min) + min;
+		int randomNumber = random.nextInt(max - min) + min;
 		type = amts[randomNumber];
 		if (type == 1) {
 			return ItemStackFromId.get(ucars.config
@@ -947,7 +950,7 @@ public class MarioKartStuff {
 		Powerup[] pows = Powerup.values();
 		int min = 0;
 		int max = pows.length;
-		int randomNumber = plugin.random.nextInt(max - min) + min;
+		int randomNumber = random.nextInt(max - min) + min;
 		Powerup pow = pows[randomNumber];
 		Integer[] amts = new Integer[] { 1, 1, 1, 1, 1, 1, 1, 3, 1 };
 		min = 0;
@@ -958,7 +961,7 @@ public class MarioKartStuff {
 		if (max < 1) {
 			max = 0;
 		}
-		randomNumber = plugin.random.nextInt(max - min) + min;
+		randomNumber = random.nextInt(max - min) + min;
 		return PowerupMaker.getPowerup(pow, amts[randomNumber]);
 	}
 

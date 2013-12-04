@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
-import java.util.logging.Level;
 
 import net.stormdev.mario.utils.CheckpointCheck;
 import net.stormdev.mario.utils.DoubleValueComparator;

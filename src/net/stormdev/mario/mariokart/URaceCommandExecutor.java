@@ -3,6 +3,7 @@ package net.stormdev.mario.mariokart;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.SortedMap;
 import java.util.regex.Pattern;
 
@@ -18,10 +19,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Material;
 
 public class URaceCommandExecutor implements CommandExecutor {
 	MarioKart plugin = null;
-
+	
 	public URaceCommandExecutor(MarioKart plugin) {
 		this.plugin = plugin;
 	}
@@ -64,7 +66,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 					return true;
 				}
 				int id = MarioKart.config.getInt("setup.create.wand");
-				ItemStack named = new ItemStack(id);
+				ItemStack named = new ItemStack(Material.matchMaterial(Integer.toString(id))); //Should Work
 				String start = MarioKart.msgs.get("setup.create.start");
 				start = start.replaceAll(Pattern.quote("%id%"), "" + id);
 				start = start.replaceAll(Pattern.quote("%name%"), named
@@ -335,7 +337,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 					}
 					int randomNumber;
 					try {
-						randomNumber = MarioKart.plugin.random.nextInt(max - min)
+						randomNumber = new Random().nextInt(max - min) //TODO: Not efficient
 								+ min;
 					} catch (Exception e) {
 						randomNumber = 0;
