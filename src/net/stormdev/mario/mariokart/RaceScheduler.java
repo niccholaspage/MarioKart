@@ -22,8 +22,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 
-import com.rosaloves.bitlyj.Bitly;
-import com.rosaloves.bitlyj.Url;
 import com.useful.ucarsCommon.StatValue;
 
 public class RaceScheduler {
@@ -89,20 +87,14 @@ public class RaceScheduler {
 				try {
 					new URL(rl);
 				} catch (MalformedURLException e2) {
-					valid = false;
+					rl = "https://dl.dropboxusercontent.com/u/147363358/MarioKart/Resource/MarioKart-latest.zip";
 				}
 				if (valid && MarioKart.config.getBoolean("bitlyUrlShortner")) {
 					// Shorten url
-					player.sendMessage(MarioKart.colors.getInfo()
-							+ MarioKart.msgs.get("resource.download"));
-					// Generic access token:
-					// 3676e306c866a24e3586a109b9ddf36f3d177556
-					Url url = Bitly.as("storm345",
-							"R_b0fae26d68750227470cd06b23be70b7").call(
-									Bitly.shorten(rl));
+					player.sendMessage(MarioKart.colors.getInfo() + MarioKart.msgs.get("resource.download"));
 					player.sendMessage(MarioKart.colors.getInfo()
 							+ MarioKart.msgs.get("resource.downloadHelp")
-							+ ChatColor.RESET + " " + url.getShortUrl());
+							+ ChatColor.RESET + " " + "http://bit.ly/19h9R6P");
 					player.setTexturePack(rl);
 				} else {
 					// Dont shorten url
