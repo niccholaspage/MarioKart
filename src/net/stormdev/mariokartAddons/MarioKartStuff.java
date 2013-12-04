@@ -35,6 +35,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
@@ -43,10 +44,11 @@ import com.useful.ucars.ucarUpdateEvent;
 import com.useful.ucars.ucars;
 import com.useful.ucarsCommon.StatValue;
 
-public class MarioKartStuff {
-	MarioKart plugin = null;
+public class MarioKartStuff
+{
+	private MarioKart plugin = null;
 	private HashMap<UUID, BukkitTask> tasks = new HashMap<UUID, BukkitTask>();
-	Boolean enabled = true;
+	private Boolean enabled = true;
 	public ItemStack respawn = null;
 	private Random random = null;
 
@@ -60,8 +62,8 @@ public class MarioKartStuff {
 		random = new Random();
 	}
 
-	@SuppressWarnings("deprecation")
-	public void calculate(final Player player, Event event) {
+	public void calculate(final Player player, Event event)
+	{
 		if (!enabled) {
 			return;
 		}
@@ -511,7 +513,7 @@ public class MarioKartStuff {
 				tnt.setMetadata("explosion.none", new StatValue(null, plugin));
 				vel.setY(0.2); // Distance to throw it
 				tnt.setVelocity(vel);
-				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable()
+				new BukkitRunnable()
 				{
 					int count = 12; //Should Work
 					@Override
@@ -531,7 +533,7 @@ public class MarioKartStuff {
 							return;
 						}
 					}
-				});
+				}.runTaskAsynchronously(plugin);
 			} else if (ItemStackFromId.equals(
 					MarioKart.config.getString("mariokart.lightning"),
 					inHand.getTypeId(), inHand.getDurability())) {
@@ -931,29 +933,28 @@ public class MarioKartStuff {
 		return;
 	}
 
-	public ItemStack getRandomBoost() {
-		int type = 1;
-		int min = 0;
+	public ItemStack getRandomBoost()
+	{
 		Integer[] amts = new Integer[] { 1, 1, 3, 2, 2, 2, 2 };
-		int max = amts.length;
-		int randomNumber = random.nextInt(max - min) + min;
-		type = amts[randomNumber];
-		if (type == 1) {
-			return ItemStackFromId.get(ucars.config
-					.getString("general.cars.lowBoost"));
-		} else if (type == 2) {
-			return ItemStackFromId.get(ucars.config
-					.getString("general.cars.medBoost"));
+		int randomNumber = random.nextInt(7);
+		int type = amts[randomNumber];
+		switch(type)
+		{
+		case 1:
+			return ItemStackFromId.get(ucars.config.getString("general.cars.lowBoost"));
+		case 2: 
+			return ItemStackFromId.get(ucars.config.getString("general.cars.medBoost"));
+		case 3:
+			return ItemStackFromId.get(ucars.config.getString("general.cars.highBoost"));
 		}
-		return ItemStackFromId.get(ucars.config
-				.getString("general.cars.highBoost"));
+		return ItemStackFromId.get(ucars.config.getString("general.cars.lowBoost"));
 	}
 
 	public ItemStack getRandomPowerup() {
 		Powerup[] pows = Powerup.values();
 		int min = 0;
 		int max = pows.length;
-		int randomNumber = random.nextInt(max - min) + min;
+		int randomNumber = random.nextInt(pows.length);
 		Powerup pow = pows[randomNumber];
 		Integer[] amts = new Integer[] { 1, 1, 1, 1, 1, 1, 1, 3, 1 };
 		min = 0;
