@@ -68,7 +68,8 @@ public class MarioKartStuff
             return;
         }
         // Start calculations
-        if (event instanceof PlayerInteractEvent) {
+        if (event instanceof PlayerInteractEvent)
+        {
             PlayerInteractEvent evt = (PlayerInteractEvent) event;
             if (!ucars.listener.inACar(evt.getPlayer())) {
                 return;
@@ -741,223 +742,10 @@ public class MarioKartStuff
             evt.getPlayer().updateInventory(); // Fix 1.6 bug with inventory not
             // updating
         }
-        else if (event instanceof ucarUpdateEvent) {
-            ucarUpdateEvent evt = (ucarUpdateEvent) event;
-            Minecart car = (Minecart) evt.getVehicle();
-            Block under = car.getLocation().add(0, -1, 0).getBlock();
-            player.getInventory().setItem(8, this.respawn);
-            if (under.getType() == Material.COAL_BLOCK
-            || under.getType() == Material.COAL_BLOCK
-            || under.getType() == Material.COAL_BLOCK) {
-                Sign sign = null;
-                Location uu = (Location) under.getRelative(BlockFace.DOWN)
-                .getLocation();
-                Location first = uu;
-                try {
-                    sign = (Sign) uu.getBlock().getState();
-                }
-                catch (Exception e) {
-                    try {
-                        uu = uu.getBlock().getRelative(BlockFace.SOUTH)
-                        .getLocation();
-                        sign = (Sign) uu.getBlock().getState();
-                    }
-                    catch (Exception e1) {
-                        try {
-                            uu = uu.getBlock().getRelative(BlockFace.EAST)
-                            .getLocation();
-                            sign = (Sign) uu.getBlock().getState();
-                        }
-                        catch (Exception e2) {
-                            try {
-                                uu = uu.getBlock().getRelative(BlockFace.NORTH)
-                                .getLocation();
-                                sign = (Sign) uu.getBlock().getState();
-                            }
-                            catch (Exception e3) {
-                                try {
-                                    uu = uu.getBlock()
-                                    .getRelative(BlockFace.WEST)
-                                    .getLocation();
-                                    sign = (Sign) uu.getBlock().getState();
-                                }
-                                catch (Exception e4) {
-                                    try {
-                                        uu = uu.getBlock()
-                                        .getRelative(BlockFace.SOUTH)
-                                        .getLocation();
-                                        sign = (Sign) uu.getBlock().getState();
-                                    }
-                                    catch (Exception e5) {
-                                        try {
-                                            uu = first
-                                            .getBlock()
-                                            .getRelative(
-                                            BlockFace.NORTH)
-                                            .getLocation();
-                                            sign = (Sign) uu.getBlock()
-                                            .getState();
-                                        }
-                                        catch (Exception e6) {
-                                            try {
-                                                uu = first
-                                                .getBlock()
-                                                .getRelative(
-                                                BlockFace.EAST)
-                                                .getLocation();
-                                                sign = (Sign) uu.getBlock()
-                                                .getState();
-                                            }
-                                            catch (Exception e7) {
-                                                return;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                final String[] lines = sign.getLines();
-                if (ChatColor.stripColor(lines[0]).equalsIgnoreCase(
-                "[MarioKart]")
-                || ChatColor.stripColor(lines[0]).equalsIgnoreCase(
-                "[uRace]")) {
-                    if (ChatColor.stripColor(lines[1])
-                    .equalsIgnoreCase("items")) {
-                        if (player.hasMetadata("kart.rolling")) {
-                            return;
-                        }
-                        final Race r = plugin.raceMethods.inAGame(player);
-                        if (r == null) {
-                            return;
-                        }
-                        final Location signLoc = sign.getLocation();
-                        if (r.reloadingItemBoxes.contains(signLoc)) {
-                            return; // Box is reloading
-                        }
-                        /*
-                        * if(ChatColor.stripColor(lines[3]).equalsIgnoreCase("wait"
-                        * )){
-                            return;
-                        }
-                        */
-                        if (player.getInventory().getContents().length > 0) {
-                            player.getInventory().clear();
-                            player.getInventory().setItem(8, this.respawn);
-                        }
-                        ItemStack give = null;
-                        if (ChatColor.stripColor(lines[2]).equalsIgnoreCase(
-                        "all")) {
-                            // Give all items
-                            ItemStack a = this.getRandomPowerup();
-                            ItemStack b = this.getRandomBoost();
-                            int randomNumber = random.nextInt(3);
-                            if (randomNumber < 1) {
-                                give = b;
-                            }
-                            else {
-                                give = a;
-                            }
-                            Player ply = ((Player) car.getPassenger());
-                            if (plugin.raceMethods.inAGame(ply) != null) {
-                                Race race = plugin.raceMethods.inAGame(ply);
-                                if (ply.getName().equals(race.winning)) {
-                                    while (ItemStackFromId.equals(MarioKart.config
-                                    .getString("mariokart.blueShell"),
-                                    give.getTypeId(), give
-                                    .getDurability())) {
-                                        give = this.getRandomPowerup();
-                                    }
-                                }
-                            }
-                        }
-                        else {
-                            // Give mario items
-                            Player ply = ((Player) car.getPassenger());
-                            give = this.getRandomPowerup();
-                            if (plugin.raceMethods.inAGame(ply) != null) {
-                                Race race = plugin.raceMethods.inAGame(ply);
-                                if (ply.getName().equals(race.winning)) {
-                                    while (ItemStackFromId.equals(MarioKart.config
-                                    .getString("mariokart.blueShell"),
-                                    give.getTypeId(), give
-                                    .getDurability())) {
-                                        give = this.getRandomPowerup();
-                                    }
-                                }
-                            }
-                        }
-                        final Player ply = ((Player) car.getPassenger());
-                        ply.setMetadata("kart.rolling", new StatValue(true,
-                        plugin));
-                        final ItemStack get = give;
-                        plugin.getServer().getScheduler()
-                        .runTaskAsynchronously(plugin, new Runnable() {
-                            public void run() {
-                                int min = 0;
-                                int max = 20;
-                                int delay = 100;
-                                World world = ply.getWorld();
-                                int z = random
-                                .nextInt(max - min) + min;
-                                for (int i = 0; i <= z; i++) {
-                                    ply.getInventory().clear();
-                                    ply.getInventory().setItem(8,
-                                    respawn);
-                                    ply.getInventory().addItem(
-                                    getRandomPowerup());
-                                    ply.updateInventory();
-                                    world.playSound(ply.getLocation(),
-                                    Sound.NOTE_PIANO, 0.2f,
-                                    1.5f);
-                                    try {
-                                        Thread.sleep(delay);
-                                    }
-                                    catch (InterruptedException e) {
-                                    }
-                                    delay = delay + (z / 100 * i);
-                                    if (delay > 1000) {
-                                        delay = 1000;
-                                    }
-                                }
-                                ply.getInventory().clear();
-                                ply.getInventory().setItem(8, respawn);
-                                ply.getInventory().addItem(get);
-                                ply.removeMetadata("kart.rolling",
-                                plugin);
-                                ply.updateInventory();
-                                return;
-                            }
-                        }
-                        );
-                        List<Entity> ents = ply.getNearbyEntities(2, 3, 2);
-                        for (Entity ent : ents) {
-                            if (ent instanceof EnderCrystal) {
-                                final Location loc = ent.getLocation();
-                                r.reloadingItemBoxes.add(signLoc);
-                                MarioKart.plugin.gameScheduler.updateGame(r);
-                                // final Sign si = sign;
-                                plugin.getServer().getScheduler()
-                                .runTaskLater(plugin, new Runnable() {
-                                    public void run() {
-                                        r.reloadingItemBoxes
-                                        .remove(signLoc);
-                                        MarioKart.plugin.gameScheduler
-                                        .updateGame(r);
-                                        MarioKart.listener
-                                        .spawnItemPickupBox(loc);
-                                        return;
-                                    }
-                                }
-                                , 200l);
-                                ent.remove();
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        /*
+         * NEW EVENT INSTANCEOF
+         */
+        
         // End calculations
         return;
     }
@@ -999,5 +787,158 @@ public class MarioKartStuff
         }
         randomNumber = random.nextInt(max - min) + min;
         return PowerupMaker.getPowerup(pow, amts[randomNumber]);
+    }
+    
+    public void carupdate(Player p, ucarUpdateEvent e)
+    {
+        Minecart car = (Minecart) e.getVehicle();
+        Block under = car.getLocation().add(0, -1, 0).getBlock();
+        p.getInventory().setItem(8, this.respawn);
+        if (under.getType() == Material.COAL_BLOCK)
+        {
+            Sign sign = null;
+            for (BlockFace face : BlockFace.values())
+            {
+            	try {
+            		sign = (Sign)under.getRelative(face).getState();
+            		break;
+            	}
+            	catch (Exception ex)
+            	{	
+            	}
+            }
+            final String[] lines = sign.getLines();
+            if (ChatColor.stripColor(lines[0]).equalsIgnoreCase("[MarioKart]") || ChatColor.stripColor(lines[0]).equalsIgnoreCase("[uRace]"))
+            {
+                if (ChatColor.stripColor(lines[1]).equalsIgnoreCase("items"))
+                {
+                    if (p.hasMetadata("kart.rolling")) {
+                        return;
+                    }
+                    final Race r = plugin.raceMethods.inAGame(p);
+                    if (r == null) {
+                        return;
+                    }
+                    final Location signLoc = sign.getLocation();
+                    if (r.reloadingItemBoxes.contains(signLoc)) {
+                        return; // Box is reloading
+                    }
+                    /*if(ChatColor.stripColor(lines[3]).equalsIgnoreCase("wait")) {
+                        return;
+                    }*/
+                    if (p.getInventory().getContents().length > 0) {
+                        p.getInventory().clear();
+                        p.getInventory().setItem(8, this.respawn);
+                    }
+                    ItemStack give = null;
+                    if (ChatColor.stripColor(lines[2]).equalsIgnoreCase("all"))
+                    {
+                        // Give all items
+                        ItemStack a = this.getRandomPowerup();
+                        ItemStack b = this.getRandomBoost();
+                        int randomNumber = random.nextInt(3);
+                        if (randomNumber < 1) {
+                            give = b;
+                        }
+                        else {
+                            give = a;
+                        }
+                        Player ply = ((Player) car.getPassenger());
+                        if (plugin.raceMethods.inAGame(ply) != null) {
+                            Race race = plugin.raceMethods.inAGame(ply);
+                            if (ply.getName().equals(race.winning)) {
+                                while (ItemStackFromId.equals(MarioKart.config
+                                .getString("mariokart.blueShell"),
+                                give.getTypeId(), give
+                                .getDurability())) {
+                                    give = this.getRandomPowerup();
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        // Give mario items
+                        Player ply = ((Player) car.getPassenger());
+                        give = this.getRandomPowerup();
+                        if (plugin.raceMethods.inAGame(ply) != null) {
+                            Race race = plugin.raceMethods.inAGame(ply);
+                            if (ply.getName().equals(race.winning)) {
+                                while (ItemStackFromId.equals(MarioKart.config
+                                .getString("mariokart.blueShell"),
+                                give.getTypeId(), give
+                                .getDurability())) {
+                                    give = this.getRandomPowerup();
+                                }
+                            }
+                        }
+                    }
+                    final Player ply = ((Player) car.getPassenger());
+                    ply.setMetadata("kart.rolling", new StatValue(true,
+                    plugin));
+                    final ItemStack get = give;
+                    plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+                        public void run() {
+                            int min = 0;
+                            int max = 20;
+                            int delay = 100;
+                            World world = ply.getWorld();
+                            int z = random
+                            .nextInt(max - min) + min;
+                            for (int i = 0; i <= z; i++) {
+                                ply.getInventory().clear();
+                                ply.getInventory().setItem(8,
+                                respawn);
+                                ply.getInventory().addItem(
+                                getRandomPowerup());
+                                ply.updateInventory();
+                                world.playSound(ply.getLocation(),
+                                Sound.NOTE_PIANO, 0.2f,
+                                1.5f);
+                                try {
+                                    Thread.sleep(delay);
+                                }
+                                catch (InterruptedException e) {
+                                }
+                                delay = delay + (z / 100 * i);
+                                if (delay > 1000) {
+                                    delay = 1000;
+                                }
+                            }
+                            ply.getInventory().clear();
+                            ply.getInventory().setItem(8, respawn);
+                            ply.getInventory().addItem(get);
+                            ply.removeMetadata("kart.rolling",
+                            plugin);
+                            ply.updateInventory();
+                            return;
+                        }
+                    });
+                    List<Entity> ents = ply.getNearbyEntities(2, 3, 2);
+                    for (Entity ent : ents)
+                    {
+                        if (ent instanceof EnderCrystal) {
+                            final Location loc = ent.getLocation();
+                            r.reloadingItemBoxes.add(signLoc);
+                            MarioKart.plugin.gameScheduler.updateGame(r);
+                            // final Sign si = sign;
+                            plugin.getServer().getScheduler()
+                            .runTaskLater(plugin, new Runnable() {
+                                public void run() {
+                                    r.reloadingItemBoxes
+                                    .remove(signLoc);
+                                    MarioKart.plugin.gameScheduler
+                                    .updateGame(r);
+                                    MarioKart.listener
+                                    .spawnItemPickupBox(loc);
+                                    return;
+                                }
+                            }
+                            , 200l);
+                            ent.remove();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

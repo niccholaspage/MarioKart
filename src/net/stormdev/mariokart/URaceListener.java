@@ -819,7 +819,7 @@ public class URaceListener implements Listener
 	}
 
 	@EventHandler
-	void signClicker(PlayerInteractEvent event) {
+	public void signClicker(PlayerInteractEvent event) {
 		MarioKart.marioKart.calculate(event.getPlayer(), event);
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
