@@ -1,4 +1,4 @@
-package net.stormdev.mario.mariokart;
+package net.stormdev.mariokart;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

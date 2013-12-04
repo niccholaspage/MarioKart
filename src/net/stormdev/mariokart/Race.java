@@ -1,4 +1,4 @@
-package net.stormdev.mario.mariokart;
+package net.stormdev.mariokart;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,15 +8,15 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import net.stormdev.mario.utils.CheckpointCheck;
-import net.stormdev.mario.utils.DoubleValueComparator;
-import net.stormdev.mario.utils.RaceEndEvent;
-import net.stormdev.mario.utils.RaceFinishEvent;
-import net.stormdev.mario.utils.RaceStartEvent;
-import net.stormdev.mario.utils.RaceTrack;
-import net.stormdev.mario.utils.RaceType;
-import net.stormdev.mario.utils.RaceUpdateEvent;
-import net.stormdev.mario.utils.SerializableLocation;
+import net.stormdev.mariokart.utils.CheckpointCheck;
+import net.stormdev.mariokart.utils.DoubleValueComparator;
+import net.stormdev.mariokart.utils.RaceEndEvent;
+import net.stormdev.mariokart.utils.RaceFinishEvent;
+import net.stormdev.mariokart.utils.RaceStartEvent;
+import net.stormdev.mariokart.utils.RaceTrack;
+import net.stormdev.mariokart.utils.RaceType;
+import net.stormdev.mariokart.utils.RaceUpdateEvent;
+import net.stormdev.mariokart.utils.SerializableLocation;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

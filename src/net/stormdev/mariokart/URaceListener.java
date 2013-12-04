@@ -1,4 +1,4 @@
-package net.stormdev.mario.mariokart;
+package net.stormdev.mariokart;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,16 +10,16 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
-import net.stormdev.mario.utils.CheckpointCheck;
-import net.stormdev.mario.utils.DoubleValueComparator;
-import net.stormdev.mario.utils.RaceEndEvent;
-import net.stormdev.mario.utils.RaceFinishEvent;
-import net.stormdev.mario.utils.RaceQue;
-import net.stormdev.mario.utils.RaceStartEvent;
-import net.stormdev.mario.utils.RaceType;
-import net.stormdev.mario.utils.RaceUpdateEvent;
-import net.stormdev.mario.utils.TrackCreator;
-import net.stormdev.mario.utils.shellUpdateEvent;
+import net.stormdev.mariokart.utils.CheckpointCheck;
+import net.stormdev.mariokart.utils.DoubleValueComparator;
+import net.stormdev.mariokart.utils.RaceEndEvent;
+import net.stormdev.mariokart.utils.RaceFinishEvent;
+import net.stormdev.mariokart.utils.RaceQue;
+import net.stormdev.mariokart.utils.RaceStartEvent;
+import net.stormdev.mariokart.utils.RaceType;
+import net.stormdev.mariokart.utils.RaceUpdateEvent;
+import net.stormdev.mariokart.utils.TrackCreator;
+import net.stormdev.mariokart.utils.shellUpdateEvent;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;

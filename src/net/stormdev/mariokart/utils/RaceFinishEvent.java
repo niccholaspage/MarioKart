@@ -1,7 +1,7 @@
-package net.stormdev.mario.utils;
+package net.stormdev.mariokart.utils;
 
-import net.stormdev.mario.mariokart.Race;
-import net.stormdev.mario.mariokart.User;
+import net.stormdev.mariokart.Race;
+import net.stormdev.mariokart.User;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

@@ -1,4 +1,4 @@
-package net.stormdev.mario.mariokart;
+package net.stormdev.mariokart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +7,10 @@ import java.util.Random;
 import java.util.SortedMap;
 import java.util.regex.Pattern;
 
-import net.stormdev.mario.utils.RaceQue;
-import net.stormdev.mario.utils.RaceTrack;
-import net.stormdev.mario.utils.RaceType;
-import net.stormdev.mario.utils.TrackCreator;
+import net.stormdev.mariokart.utils.RaceQue;
+import net.stormdev.mariokart.utils.RaceTrack;
+import net.stormdev.mariokart.utils.RaceType;
+import net.stormdev.mariokart.utils.TrackCreator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

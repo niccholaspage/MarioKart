@@ -1,4 +1,4 @@
-package net.stormdev.mario.mariokart;
+package net.stormdev.mariokart;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.stormdev.mario.utils.LowHighDoubleValueComparator;
+import net.stormdev.mariokart.utils.LowHighDoubleValueComparator;
 
 public class RaceTimes {
 	public File saveFile = null;

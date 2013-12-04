@@ -1,4 +1,4 @@
-package net.stormdev.mario.mariokart;
+package net.stormdev.mariokart;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,10 +9,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import net.stormdev.mario.utils.RaceQue;
-import net.stormdev.mario.utils.RaceTrack;
-import net.stormdev.mario.utils.RaceType;
-import net.stormdev.mario.utils.SerializableLocation;
+import net.stormdev.mariokart.utils.RaceQue;
+import net.stormdev.mariokart.utils.RaceTrack;
+import net.stormdev.mariokart.utils.RaceType;
+import net.stormdev.mariokart.utils.SerializableLocation;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;

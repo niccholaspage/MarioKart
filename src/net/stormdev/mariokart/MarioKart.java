@@ -1,4 +1,4 @@
-package net.stormdev.mario.mariokart;
+package net.stormdev.mariokart;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,12 +7,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-import net.stormdev.mario.utils.Ques;
-import net.stormdev.mario.utils.RaceMethods;
-import net.stormdev.mario.utils.RaceQue;
-import net.stormdev.mario.utils.RaceTrackManager;
-import net.stormdev.mario.utils.TrackCreator;
-import net.stormdev.mariokartAddons.MarioKartStuff;
+import net.stormdev.mariokart.powerups.MarioKartStuff;
+import net.stormdev.mariokart.utils.Ques;
+import net.stormdev.mariokart.utils.RaceMethods;
+import net.stormdev.mariokart.utils.RaceQue;
+import net.stormdev.mariokart.utils.RaceTrackManager;
+import net.stormdev.mariokart.utils.TrackCreator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
