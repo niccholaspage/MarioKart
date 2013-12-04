@@ -25,7 +25,6 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -501,7 +500,8 @@ public class Race {
 				// better
 				// performance
 				p.removeMetadata("checkpoint.distance", MarioKart.plugin);
-				p.setMetadata("checkpoint.distance", new FixedMetadataValue(MarioKart.plugin, dist));
+				p.setMetadata("checkpoint.distance", new StatValue(dist,
+						MarioKart.plugin));
 				if (dist < 100) {
 					at = true;
 					checkpoint = key;
