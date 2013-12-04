@@ -69,13 +69,13 @@ import com.useful.ucars.ucarUpdateEvent;
 import com.useful.ucars.ucars;
 import com.useful.ucarsCommon.StatValue;
 
-public class URaceListener implements Listener {
-	MarioKart plugin = null;
-
+public class URaceListener implements Listener
+{
+	private MarioKart plugin = null;
 	public URaceListener(MarioKart plugin) {
 		this.plugin = plugin;
 	}
-
+	
 	public void penalty(final Minecart car, long time) {
 		if (car == null) {
 			return;

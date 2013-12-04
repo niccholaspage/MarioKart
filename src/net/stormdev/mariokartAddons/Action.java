@@ -14,5 +14,5 @@ public enum Action {
 	FIRE_FREEZE,
 	HIT_BY_SHELL,
 	STRUCK_BY_LIGHTNING,
-	UNKNOWN
+	UNKNOWN;
 }

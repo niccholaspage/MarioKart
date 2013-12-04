@@ -511,24 +511,27 @@ public class MarioKartStuff {
 				tnt.setMetadata("explosion.none", new StatValue(null, plugin));
 				vel.setY(0.2); // Distance to throw it
 				tnt.setVelocity(vel);
-				final MoveableInt count = new MoveableInt(12);
-				plugin.getServer().getScheduler()
-						.runTaskAsynchronously(plugin, new Runnable() {
-							public void run() {
-								if (count.getInt() > 0) {
-									count.setInt(count.getInt() - 1);
-									tnt.setVelocity(vel);
-									tnt.setMetadata("explosion.none",
-											new StatValue(null, plugin));
-									try {
-										Thread.sleep(50);
-									} catch (InterruptedException e) {
-									}
-								} else {
-									return;
-								}
+				plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable()
+				{
+					int count = 12; //Should Work
+					@Override
+					public void run()
+					{
+						if (count > 0)
+						{
+							count--;
+							tnt.setVelocity(vel);
+							tnt.setMetadata("explosion.none",
+									new StatValue(null, plugin));
+							try {
+								Thread.sleep(50);
+							} catch (InterruptedException e) {
 							}
-						});
+						} else {
+							return;
+						}
+					}
+				});
 			} else if (ItemStackFromId.equals(
 					MarioKart.config.getString("mariokart.lightning"),
 					inHand.getTypeId(), inHand.getDurability())) {
