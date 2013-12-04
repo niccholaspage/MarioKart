@@ -54,7 +54,7 @@ public class RaceQue {
 		this.players.remove(player);
 
 		if (this.type == RaceType.TIME_TRIAL) {
-			MarioKart.plugin.raceQues.removeQue(this.track.getTrackName());
+		Queues.removeQue(this.track.getTrackName());
 		}
 
 		return;
@@ -66,7 +66,7 @@ public class RaceQue {
 				this.players.remove(player);
 
 				if (this.type == RaceType.TIME_TRIAL) {
-					MarioKart.plugin.raceQues.removeQue(this.track.getTrackName());
+				Queues.removeQue(this.track.getTrackName());
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 
 import net.stormdev.mariokart.powerups.MarioKartStuff;
-import net.stormdev.mariokart.utils.Ques;
+import net.stormdev.mariokart.utils.Queues;
 import net.stormdev.mariokart.utils.RaceMethods;
 import net.stormdev.mariokart.utils.RaceQue;
 import net.stormdev.mariokart.utils.RaceTrackManager;
@@ -36,8 +36,6 @@ public class MarioKart extends JavaPlugin
     public RaceTrackManager trackManager = null;
     public RaceScheduler gameScheduler = null;
     public static HashMap<String, TrackCreator> trackCreators = new HashMap<String, TrackCreator>();
-    public HashMap<String, RaceQue> ques = new HashMap<String, RaceQue>();
-    public Ques raceQues = null;
     public static Lang msgs = null;
     public RaceMethods raceMethods = null;
     public static MarioKartStuff marioKart = null;
@@ -91,7 +89,6 @@ public class MarioKart extends JavaPlugin
         this.trackManager = new RaceTrackManager(this, new File(getDataFolder()
         + File.separator + "Data" + File.separator
         + "tracks.uracetracks"));
-        this.raceQues = new Ques(this);
         this.raceMethods = new RaceMethods();
         this.gameScheduler = new RaceScheduler();
         // Setup marioKart

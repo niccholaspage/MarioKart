@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import net.stormdev.mariokart.utils.CheckpointCheck;
 import net.stormdev.mariokart.utils.DoubleValueComparator;
+import net.stormdev.mariokart.utils.Queues;
 import net.stormdev.mariokart.utils.RaceEndEvent;
 import net.stormdev.mariokart.utils.RaceFinishEvent;
 import net.stormdev.mariokart.utils.RaceQue;
@@ -568,9 +569,9 @@ public class URaceListener implements Listener
 			if (arenaName == null) {
 				return;
 			}
-			RaceQue arena = plugin.raceQues.getQue(arenaName);
+			RaceQue arena = Queues.getQue(arenaName);
 			arena.removePlayer(player);
-			plugin.raceQues.setQue(arenaName, arena);
+			Queues.setQue(arenaName, arena);
 			return;
 		} else {
 			game.leave(game.getUser(player), true);
@@ -587,9 +588,9 @@ public class URaceListener implements Listener
 			if (arenaName == null) {
 				return;
 			}
-			RaceQue arena = plugin.raceQues.getQue(arenaName);
+			RaceQue arena = Queues.getQue(arenaName);
 			arena.removePlayer(player);
-			plugin.raceQues.setQue(arenaName, arena);
+			Queues.setQue(arenaName, arena);
 			return;
 		} else {
 			game.leave(game.getUser(player), true);

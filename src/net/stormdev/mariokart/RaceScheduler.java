@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import net.stormdev.mariokart.utils.Queues;
 import net.stormdev.mariokart.utils.RaceQue;
 import net.stormdev.mariokart.utils.RaceTrack;
 import net.stormdev.mariokart.utils.RaceType;
@@ -74,7 +75,7 @@ public class RaceScheduler {
 								+ MarioKart.msgs.get("race.que.joined"));
 					}
 				}
-				plugin.raceQues.setQue(trackName, que);
+				Queues.setQue(trackName, que);
 				this.reCalculateQues();
 				player.sendMessage(MarioKart.colors.getSuccess()
 						+ MarioKart.msgs.get("race.que.success"));
@@ -117,9 +118,9 @@ public class RaceScheduler {
 	}
 
 	public void reCalculateQues() {
-		Set<String> queNames = plugin.raceQues.getQues();
+		Set<String> queNames = Queues.getQues();
 		for (String aname : queNames) {
-			RaceQue que = plugin.raceQues.getQue(aname);
+			RaceQue que = Queues.getQue(aname);
 			List<Player> arenaque = que.getPlayers();
 
 			for (Player player : arenaque) {
@@ -144,7 +145,7 @@ public class RaceScheduler {
 					&& !(this.runningGames >= this.maxGames)) {
 				Boolean timed = que.getType() == RaceType.TIME_TRIAL;
 				que.setTransitioning(true);
-				plugin.raceQues.setQue(aname, que);
+				Queues.setQue(aname, que);
 				final String queName = aname;
 				double seconds = MarioKart.config
 						.getDouble("general.raceGracePeriod");
@@ -166,12 +167,12 @@ public class RaceScheduler {
 
 						public void run() {
 							String aname = queName;
-							RaceQue arena = MarioKart.plugin.raceQues
+							RaceQue arena = Queues
 									.getQue(aname);
 							if (arena.getHowManyPlayers() < MarioKart.config
 									.getInt("race.que.minPlayers")) {
 								arena.setTransitioning(false);
-								plugin.raceQues.setQue(aname, arena);
+								Queues.setQue(aname, arena);
 								return;
 							}
 							Race game = new Race(arena.getTrack(),
@@ -187,7 +188,7 @@ public class RaceScheduler {
 								arena.removePlayer(player);
 							}
 							arena.setTransitioning(false);
-							plugin.raceQues.removeQue(aname);
+							Queues.removeQue(aname);
 							startGame(arena, aname, game);
 							return;
 						}
@@ -198,11 +199,11 @@ public class RaceScheduler {
 
 						public void run() {
 							String aname = queName;
-							RaceQue arena = MarioKart.plugin.raceQues
+							RaceQue arena = Queues
 									.getQue(aname);
 							if (arena.getHowManyPlayers() < 1) {
 								arena.setTransitioning(false);
-								plugin.raceQues.removeQue(aname);
+								Queues.removeQue(aname);
 								return;
 							}
 							Race game = new Race(arena.getTrack(),
@@ -218,7 +219,7 @@ public class RaceScheduler {
 								arena.removePlayer(player);
 							}
 							arena.setTransitioning(false);
-							plugin.raceQues.removeQue(aname);
+							Queues.removeQue(aname);
 							startGame(arena, aname, game);
 							return;
 						}

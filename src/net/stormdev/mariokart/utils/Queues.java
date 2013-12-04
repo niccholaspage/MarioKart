@@ -1,47 +1,29 @@
 package net.stormdev.mariokart.utils;
 
+import java.util.HashMap;
 import java.util.Set;
 
-import net.stormdev.mariokart.MarioKart;
-
-public class Ques {
-	MarioKart plugin = null;
-
-	public Ques(MarioKart plugin) {
-		this.plugin = plugin;
+public class Queues
+{
+	public static HashMap<String, RaceQue> queues = new HashMap<String, RaceQue>();
+	
+	public static void setQue(String name, RaceQue toAdd) {
+		queues.put(name, toAdd);
 	}
 
-	public void setQue(String name, RaceQue toAdd) {
-		plugin.ques.put(name, toAdd);
-		return;
+	public static void removeQue(String name) {
+		queues.remove(name);
 	}
 
-	public void removeQue(String name) {
-		Set<String> keys = getQues();
-		for (String key : keys) {
-			if (key.equalsIgnoreCase(name)) {
-				name = key;
-			}
-		}
-		plugin.ques.remove(name);
-		return;
+	public static RaceQue getQue(String name) {
+		return queues.get(name);
 	}
 
-	public RaceQue getQue(String name) {
-		return plugin.ques.get(name);
+	public static Boolean queExists(String name) {
+		return queues.keySet().contains(name);
 	}
 
-	public Boolean queExists(String name) {
-		Set<String> keys = getQues();
-		for (String key : keys) {
-			if (key.equalsIgnoreCase(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public Set<String> getQues() {
-		return plugin.ques.keySet();
+	public static Set<String> getQues() {
+		return queues.keySet();
 	}
 }

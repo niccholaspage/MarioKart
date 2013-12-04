@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.SortedMap;
 import java.util.regex.Pattern;
 
+import net.stormdev.mariokart.utils.Queues;
 import net.stormdev.mariokart.utils.RaceQue;
 import net.stormdev.mariokart.utils.RaceTrack;
 import net.stormdev.mariokart.utils.RaceType;
@@ -299,8 +300,8 @@ public class URaceCommandExecutor implements CommandExecutor {
 				List<String> gameArenas = new ArrayList<String>();
 				List<String> order = new ArrayList<String>();
 				int waitingPlayers = 0;
-				for (String aname : plugin.raceQues.getQues()) {
-					RaceQue arena = plugin.raceQues.getQue(aname);
+				for (String aname : Queues.getQues()) {
+					RaceQue arena = Queues.getQue(aname);
 					if (arena.getHowManyPlayers() < arena.getPlayerLimit()) {
 						gameArenas.add(aname);
 						if (arena.getHowManyPlayers() > waitingPlayers) {
@@ -313,7 +314,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 				remaining.addAll(gameArenas);
 				for (int i = waitNo; i <= waitingPlayers; i++) {
 					for (String aname : gameArenas) {
-						RaceQue arena = plugin.raceQues.getQue(aname);
+						RaceQue arena = Queues.getQue(aname);
 						if (arena.getHowManyPlayers() == waitNo) {
 							order.add(aname);
 							if (remaining.contains(aname)) {
@@ -350,12 +351,12 @@ public class URaceCommandExecutor implements CommandExecutor {
 					return true;
 				}
 				String name = order.get(0);
-				RaceQue arena = plugin.raceQues.getQue(name);
+				RaceQue arena = Queues.getQue(name);
 				if (arena.getHowManyPlayers() < 1
 						|| arena.getType() == RaceType.TIME_TRIAL) {
 					int rand = 0 + (int) (Math.random() * ((order.size() - 0) + 0));
 					name = order.get(rand);
-					arena = plugin.raceQues.getQue(name);
+					arena = Queues.getQue(name);
 				}
 				RaceTrack track = plugin.trackManager.getRaceTrack(name);
 				if (track == null) {
@@ -379,12 +380,12 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 				RaceQue que = new RaceQue(track, type);
 				trackName = track.getTrackName();
-				if (MarioKart.plugin.raceQues.getQue(trackName) != null) {
-					que = MarioKart.plugin.raceQues.getQue(trackName);
+				if (Queues.getQue(trackName) != null) {
+					que = Queues.getQue(trackName);
 				}
 				if (que.getType() != type) {
 					if (que.getHowManyPlayers() < 1) {
-						plugin.raceQues
+						Queues
 								.removeQue(que.getTrack().getTrackName());
 						que = new RaceQue(track, type);
 					} else {
@@ -422,7 +423,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 				}
 			}
 			ArrayList<String> names = new ArrayList<String>();
-			names.addAll(plugin.raceQues.getQues());
+			names.addAll(Queues.getQues());
 			double total = names.size() / 6;
 			int totalpages = (int) Math.ceil(total);
 			int pos = (page - 1) * 6;
@@ -445,7 +446,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 			sender.sendMessage(MarioKart.colors.getTitle() + msg);
 			for (int i = pos; i < (i + 6) && i < names.size(); i++) {
 				String Trackname = names.get(i);
-				RaceQue que = plugin.raceQues.getQue(Trackname);
+				RaceQue que = Queues.getQue(Trackname);
 				ChatColor color = ChatColor.GREEN;
 				if (que.getHowManyPlayers() > (que.getPlayerLimit() - 1)) {
 					color = ChatColor.RED;
@@ -491,7 +492,7 @@ public class URaceCommandExecutor implements CommandExecutor {
 			if (game) {
 				race.leave(race.getUser(player), true);
 			} else {
-				RaceQue queue = plugin.raceQues.getQue(que);
+				RaceQue queue = Queues.getQue(que);
 				plugin.gameScheduler.leaveQue(player, queue, queue.getTrack()
 						.getTrackName());
 				String msg = MarioKart.msgs.get("general.cmd.leave.success");
